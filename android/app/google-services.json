@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "114105157619",
+    "firebase_url": "https://hakepea-9e21a.firebaseio.com",
+    "project_id": "hakepea-9e21a",
+    "storage_bucket": "hakepea-9e21a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114105157619:android:8738cb6566c3bd21fb3486",
+        "android_client_info": {
+          "package_name": "app.hakepea"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "114105157619-ss1lae7iqt2qhhj45aug78gohi0q29tl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxT1V6v_KnC6fs2y5papmbaFbe5tgV5lQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "114105157619-ss1lae7iqt2qhhj45aug78gohi0q29tl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114105157619:android:ede241d6680029bbfb3486",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "114105157619-ss1lae7iqt2qhhj45aug78gohi0q29tl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxT1V6v_KnC6fs2y5papmbaFbe5tgV5lQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "114105157619-ss1lae7iqt2qhhj45aug78gohi0q29tl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

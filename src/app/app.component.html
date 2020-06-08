@@ -1,0 +1,36 @@
+<ion-app>
+  <!-- <ion-router-outlet></ion-router-outlet> -->
+  <ion-split-pane contentId="menu-content" when="xs" [disabled]="true"
+    (ionSplitPaneVisible)="onSplitPaneVisible(event)">
+    <ion-menu contentId="menu-content" menuId="menu-content" side="start" type="overlay">
+      <ion-header>
+        <ion-toolbar translucent>
+          <ion-title>Menu</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-list>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item [routerLink]="['/tabs']">
+              <ion-icon name="home" slot="start"></ion-icon>
+              <ion-label>Inicio</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item [routerLink]="['/login']">
+              <ion-icon name="person" slot="start"></ion-icon>
+              <ion-label>Moderador</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item>
+              <ion-icon name="settings" slot="start"></ion-icon>
+              <ion-label>Settings</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="menu-content"></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>
