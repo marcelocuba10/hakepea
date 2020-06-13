@@ -1,8 +1,9 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Register</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-toolbar color="primary">
+  <ion-buttons slot="start">
+    <ion-menu-button></ion-menu-button>
+  </ion-buttons>
+  <ion-title>Register</ion-title>
+</ion-toolbar>
 
 <ion-content>
   <ion-item>
@@ -15,7 +16,7 @@
     <ion-input type="password" required [(ngModel)]="user.password"></ion-input>
   </ion-item>
 
-  <ion-button class="ion-padding" expand="full" color="primary" (click)="register(user)">
+  <ion-button class="ion-padding" expand="full" color="primary" (click)="register()">
     Register
   </ion-button>
 </ion-content>

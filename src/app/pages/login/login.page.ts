@@ -11,7 +11,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  user = {} as User
+  user = {} as User  //{} es un objeto vacio
 
   constructor(
     private loadingCtrl: LoadingController,
@@ -26,41 +26,50 @@ export class LoginPage implements OnInit {
   async login(user: User) {
     if (this.formValidationUser()) {
 
-      //show loader
-      let loader = await this.loadingCtrl.create({
-        message: "Please wait..."
+      //show loading
+      let loading = await this.loadingCtrl.create({
+        message: 'Please wait..'
       });
 
-      await loader.present();
+      await loading.present();
 
       try {
-        await this.afAuth.signInWithEmailAndPassword(user.email,user.password)
-          .then(data => {
-            console.log(data);
 
-            this.navCtrl.navigateRoot("tabs");
-          })
+        await this.appService.login(this.user);
 
       } catch (error) {
-        this.appService.showToast(error);
+
+        let message: string;
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            message = 'Email ya en uso';
+            break;
+
+          case 'auth/invalid-email':
+            message = 'Email invalido';
+            break;
+
+          case 'auth/argument-error':
+            message = 'Rellenar los campos correctamente';
+            break;
+
+          case 'auth/weak-password':
+            message = 'La contraseña debe tener 6 caracteres o más.';
+            break;
+
+          default:
+            break;
+        }
+
+        this.appService.presentToast(message);
       }
 
-      await loader.dismiss();
+      await loading.dismiss();
     }
   }
 
-  formValidationUser() {
-    if (!this.user.email) {
-      this.appService.showToast("Enter email");
-      return false;
-    }
-
-    if (!this.user.password) {
-      this.appService.showToast("Enter password");
-      return false;
-    }
-
-    return true;
+  async formValidationUser() {
+    await this.appService.formValidationUser(this.user)
   }
 
 }

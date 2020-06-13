@@ -27,13 +27,16 @@ export class HomePage implements OnInit {
     private appService: AppService,
     private firestore: AngularFirestore
   ) {
+    this.getPost();
+    
     setTimeout(() => {
       this.contentLoaded = true;
     }, 2000);
+    
   }
 
   ngOnInit() {
-    this.getPost();
+    //this.getPost();
 
     console.log('Initializing HomePage');
 
