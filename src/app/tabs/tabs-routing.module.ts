@@ -24,6 +24,22 @@ const routes: Routes = [
         loadChildren: () => import('../pages/login/login.module').then(m => m.LoginPageModule)
       },
       {
+        path: 'admin',
+        loadChildren: () => import('../pages/admin/admin.module').then(m => m.AdminPageModule)
+      },
+      {
+        path: 'register',
+        loadChildren: () => import('../pages/register/register.module').then(m => m.RegisterPageModule)
+      },
+      {
+        path: 'detail/:id',
+        loadChildren: () => import('../pages/detail/detail.module').then(m => m.DetailPageModule)
+      },
+      {
+        path: 'edit-post/:id',
+        loadChildren: () => import('../pages/edit-post/edit-post.module').then(m => m.EditPostPageModule)
+      },
+      {
         path: '',
         redirectTo: '/tabs/home',
         pathMatch: 'full'
@@ -33,6 +49,11 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: '/tabs/home',
+    pathMatch: 'full'
+  },
+  {
+    path: 'admin',
+    redirectTo: '/tabs/admin',
     pathMatch: 'full'
   }
 ];

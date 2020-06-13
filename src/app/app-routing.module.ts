@@ -29,7 +29,16 @@ const routes: Routes = [
   {
     path: 'edit-post/:id',
     loadChildren: () => import('./pages/edit-post/edit-post.module').then( m => m.EditPostPageModule)
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./pages/admin/admin.module').then( m => m.AdminPageModule)
+  },
+  {
+    path: 'detail/:id',
+    loadChildren: () => import('./pages/detail/detail.module').then( m => m.DetailPageModule)
   }
+
 ];
 @NgModule({
   imports: [

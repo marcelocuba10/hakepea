@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { ToastController, NavController } from '@ionic/angular';
 import { User } from '../models/user.model';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Post } from '../models/post.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppService {
-  private loading: any;  //variable global
 
   constructor(
     private toastCtrl: ToastController,
@@ -45,6 +45,14 @@ export class AppService {
     return true;
   }
 
+  formValidation(post: Post) {
+    if (!post.detail) {
+      this.presentToast("Enter detail");
+      return false;
+    }
+    return true;
+  }
+
   async register(user: User) {
 
     try {
@@ -68,7 +76,7 @@ export class AppService {
         .then(data => {
           console.log(data);
 
-          this.navCtrl.navigateRoot("tabs");
+          this.navCtrl.navigateRoot("admin");
         })
 
     } catch (error) {

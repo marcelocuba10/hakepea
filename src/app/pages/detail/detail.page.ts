@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { AppService } from 'src/app/services/app.service';
 import { LoadingController, NavController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Post } from '../../models/post.model';
 import { ActivatedRoute } from '@angular/router';
+import {AppService} from '../../services/app.service';
 
 @Component({
-  selector: 'app-edit-post',
-  templateUrl: './edit-post.page.html',
-  styleUrls: ['./edit-post.page.scss'],
+  selector: 'app-detail',
+  templateUrl: './detail.page.html',
+  styleUrls: ['./detail.page.scss'],
 })
-export class EditPostPage implements OnInit {
+export class DetailPage implements OnInit {
   post = {} as Post;
   id: any;
 
@@ -22,7 +22,7 @@ export class EditPostPage implements OnInit {
     private actRoute: ActivatedRoute,
   ) {
     this.id = this.actRoute.snapshot.paramMap.get("id"); //captura el ID
-  }
+   }
 
   ngOnInit() {
     this.getPostById(this.id);
@@ -35,6 +35,7 @@ export class EditPostPage implements OnInit {
     });
 
     await loading.present();
+
     try {
 
       this.firestore.doc("posts/" + id).valueChanges().subscribe(data => {
@@ -72,16 +73,17 @@ export class EditPostPage implements OnInit {
       //dismiss loading
       await loading.dismiss();
       //redirect to home
-      this.navCtrl.navigateRoot("admin");
+      this.navCtrl.navigateRoot("tabs");
     }
   }
 
-  formValidation() {
-    if (!this.post.detail) {
-      this.appService.showToast("Enter detail");
-      return false;
-    }
-    return true;
+  async formValidation(){
+    await this.appService.formValidation(this.post);
+  }
+
+  OnClick(category) {
+    this.post.category = category.name;
+    this.post.imgpath = category.imgpath;
   }
 
   categories = [
@@ -123,10 +125,5 @@ export class EditPostPage implements OnInit {
       fill: 'outline'
     }
   ];
-
-  OnClick(category) {
-    this.post.category = category.name;
-    this.post.imgpath = category.imgpath;
-  }
 
 }
