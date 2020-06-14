@@ -19,7 +19,6 @@ export class DetailPage implements OnInit {
     private actRoute: ActivatedRoute,
   ) {
     this.id = this.actRoute.snapshot.paramMap.get("id"); //captura el ID
-    console.log(this.id);
   }
 
   ngOnInit() {

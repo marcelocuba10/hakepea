@@ -62,6 +62,11 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'login',
+    redirectTo: '/tabs/login',
+    pathMatch: 'full'
+  },
+  {
     path: 'detail/:id',
     redirectTo: '/tabs/detail/:id',
     pathMatch: 'full'
