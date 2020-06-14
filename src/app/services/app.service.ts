@@ -1,18 +1,23 @@
 import { Injectable } from '@angular/core';
-import { ToastController, NavController } from '@ionic/angular';
+import { ToastController, NavController, LoadingController } from '@ionic/angular';
 import { User } from '../models/user.model';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Post } from '../models/post.model';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppService {
+  post = {} as Post;
+  posts: any;
 
   constructor(
     private toastCtrl: ToastController,
     private navCtrl: NavController,
-    private afAuth: AngularFireAuth
+    private afAuth: AngularFireAuth,
+    private loadingCtrl: LoadingController,
+    private firestore: AngularFirestore
   ) { }
 
   showToast(message: string) {
@@ -81,6 +86,30 @@ export class AppService {
 
     } catch (error) {
       this.showToast(error);
+    }
+  }
+
+  async getPostById(id: string) {
+    try {
+      return this.firestore.doc("posts/" + id);
+    } catch (error) {
+      this.presentToast(error);
+    }
+  }
+
+  // async getPosts() {
+  //   try {
+  //     return this.firestore.collection("posts").valueChanges();
+  //   } catch (error) {
+  //     this.presentToast(error);
+  //   }
+  // }
+
+  async getCards() {
+    try {
+      return this.firestore.collection("about").valueChanges();
+    } catch (error) {
+      this.presentToast(error);
     }
   }
 

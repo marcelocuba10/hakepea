@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
 import { AppService } from 'src/app/services/app.service';
-import { AngularFirestore } from '@angular/fire/firestore';
 
 import {
   Plugins,
@@ -9,6 +7,7 @@ import {
   PushNotificationToken,
   PushNotificationActionPerformed
 } from '@capacitor/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 const { PushNotifications } = Plugins;
 
@@ -23,7 +22,6 @@ export class HomePage implements OnInit {
   contentLoaded = false; //skeleton variable
 
   constructor(
-    private loadingCtrl: LoadingController,
     private appService: AppService,
     private firestore: AngularFirestore
   ) {
@@ -33,7 +31,7 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
-    this.getPost();
+    this.getPosts();
 
     console.log('Initializing HomePage');
 
@@ -78,13 +76,22 @@ export class HomePage implements OnInit {
     );
   }
 
-  async getPost() {
+  async getPosts() {
     //previamente se mostrara el skeleton
 
     try {
-      this.firestore.collection("posts").
-        snapshotChanges().
-        subscribe(data => {
+      // (await this.appService.getPosts()).subscribe(data => {
+      //   this.posts = data;
+      //   console.log(this.posts);
+      //   console.log(this.posts.id);
+      //   console.log(this.posts.postId);
+      // })
+
+      //dejo de funcionar y no me traia el id del item, no se porque?
+
+      //metodo antiguo sin service
+      this.firestore.collection("posts").snapshotChanges().subscribe(
+        data => {
           this.posts = data.map(e => {
             return {
               id: e.payload.doc.id,
@@ -96,22 +103,8 @@ export class HomePage implements OnInit {
           });
         });
     } catch (error) {
-      this.appService.showToast(error);
+      this.appService.presentToast(error);
     }
-  }
-
-  async deletePost(id: string) {
-    //show loader
-    let loader = await this.loadingCtrl.create({
-      message: "Please wait..."
-    });
-
-    await loader.present();
-
-    await this.firestore.doc("posts/" + id).delete();
-
-    //dismiss loader
-    await loader.dismiss();
   }
 
 }

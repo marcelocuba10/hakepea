@@ -8,15 +8,17 @@
 </ion-header>
 
 <ion-content>
-  <ion-card>
-    <img src="https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/logos%2Fhakepea_logo.png?alt=media&token=460bcfa1-f600-4b66-b1c3-1c49a30e190c" />
-    <ion-card-header>
-      <ion-card-subtitle>Descripcion</ion-card-subtitle>
-      <ion-card-title>Madison, WI</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      Founded in 1829 on an isthmus between Lake Monona and Lake Mendota, Madison was named the capital of the Wisconsin
-      Territory in 1836.
-    </ion-card-content>
-  </ion-card>
+  <ion-list *ngFor="let card of cards">
+    <ion-card>
+      <img
+        src="{{card.img}}" />
+      <ion-card-header>
+        <ion-card-subtitle>Descripcion</ion-card-subtitle>
+        <ion-card-title>{{card.title}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        {{card.content}}
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
 </ion-content>

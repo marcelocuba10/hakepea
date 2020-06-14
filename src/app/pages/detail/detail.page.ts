@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController, NavController } from '@ionic/angular';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { Post } from '../../models/post.model';
 import { ActivatedRoute } from '@angular/router';
-import {AppService} from '../../services/app.service';
+import { AppService } from '../../services/app.service';
 
 @Component({
   selector: 'app-detail',
@@ -17,12 +16,11 @@ export class DetailPage implements OnInit {
   constructor(
     private appService: AppService,
     private loadingCtrl: LoadingController,
-    private navCtrl: NavController,
-    private firestore: AngularFirestore,
     private actRoute: ActivatedRoute,
   ) {
     this.id = this.actRoute.snapshot.paramMap.get("id"); //captura el ID
-   }
+    console.log(this.id);
+  }
 
   ngOnInit() {
     this.getPostById(this.id);
@@ -38,47 +36,30 @@ export class DetailPage implements OnInit {
 
     try {
 
-      this.firestore.doc("posts/" + id).valueChanges().subscribe(data => {
-        this.post.detail = data["detail"];
-        this.post.category = data["category"];
-        this.post.date = data["date"];
-        this.post.imgpath = data["imgpath"];
-      });
+      (await this.appService.getPostById(this.id)).valueChanges().subscribe(
+        data => {
+          this.post.detail = data["detail"];
+          this.post.category = data["category"];
+          this.post.date = data["date"];
+          this.post.imgpath = data["imgpath"];
+          console.log(this.post);
+        }
+      );
 
-      //dismiss loading
+      //otro metodo sin service
+      // this.firestore.doc("posts/" + id).valueChanges().subscribe(data => {
+      //   this.post.detail = data["detail"];
+      //   this.post.category = data["category"];
+      //   this.post.date = data["date"];
+      //   this.post.imgpath = data["imgpath"];
+      // });
+
+      // //dismiss loading
       await loading.dismiss();
 
     } catch (error) {
-      this.appService.showToast(error);
+      this.appService.presentToast(error);
     }
-  }
-
-  async updatePost(post: Post) {
-
-    if (this.formValidation) {
-      //show loading
-      let loading = await this.loadingCtrl.create({
-        message: "Please wait..."
-      });
-
-      await loading.present();
-
-      try {
-        await this.firestore.doc("posts/" + this.id).update(post);
-
-      } catch (error) {
-        this.appService.showToast(error);
-      }
-
-      //dismiss loading
-      await loading.dismiss();
-      //redirect to home
-      this.navCtrl.navigateRoot("tabs");
-    }
-  }
-
-  async formValidation(){
-    await this.appService.formValidation(this.post);
   }
 
   OnClick(category) {

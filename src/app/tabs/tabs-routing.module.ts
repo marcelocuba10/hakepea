@@ -55,6 +55,16 @@ const routes: Routes = [
     path: 'admin',
     redirectTo: '/tabs/admin',
     pathMatch: 'full'
+  },
+  {
+    path: 'register',
+    redirectTo: '/tabs/register',
+    pathMatch: 'full'
+  },
+  {
+    path: 'detail/:id',
+    redirectTo: '/tabs/detail/:id',
+    pathMatch: 'full'
   }
 ];
 
