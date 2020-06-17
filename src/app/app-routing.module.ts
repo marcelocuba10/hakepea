@@ -1,10 +1,20 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import {AuthGuard} from './guards/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
+  },
+  {
+    path: 'home',
+    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./pages/admin/admin.module').then( m => m.AdminPageModule),
+    canActivate:[AuthGuard] //canActivated recibe un parametro de opciones, en este caso un solo param
   },
   {
     path: 'login',
@@ -13,10 +23,6 @@ const routes: Routes = [
   {
     path: 'register',
     loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
-  },
-  {
-    path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
   },
   {
     path: 'about',
@@ -28,11 +34,8 @@ const routes: Routes = [
   },
   {
     path: 'edit-post/:id',
-    loadChildren: () => import('./pages/edit-post/edit-post.module').then( m => m.EditPostPageModule)
-  },
-  {
-    path: 'admin',
-    loadChildren: () => import('./pages/admin/admin.module').then( m => m.AdminPageModule)
+    loadChildren: () => import('./pages/edit-post/edit-post.module').then( m => m.EditPostPageModule),
+    canActivate:[AuthGuard]
   },
   {
     path: 'detail/:id',

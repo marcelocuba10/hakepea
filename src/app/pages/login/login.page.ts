@@ -4,6 +4,7 @@ import { User } from '../../models/user.model';
 import { LoadingController, NavController } from '@ionic/angular';
 import { AppService } from 'src/app/services/app.service';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,7 @@ export class LoginPage implements OnInit {
     private loadingCtrl: LoadingController,
     private navCtrl: NavController,
     private appService: AppService,
-    private afAuth: AngularFireAuth
+    private authservice: AuthService
   ) { }
 
   ngOnInit() {
@@ -28,14 +29,16 @@ export class LoginPage implements OnInit {
 
       //show loading
       let loading = await this.loadingCtrl.create({
-        message: 'Please wait..'
+        message: 'Por favor, aguarde..'
       });
-
       await loading.present();
 
       try {
-
-        await this.appService.login(this.user);
+        await this.authservice.login(this.user);
+        if (this.user) {
+          console.log('Logged in!');
+          this.navCtrl.navigateRoot('admin');
+        }
 
       } catch (error) {
 
@@ -57,11 +60,20 @@ export class LoginPage implements OnInit {
             message = 'La contraseña debe tener 6 caracteres o más.';
             break;
 
+          case 'auth/wrong-password':
+            message = 'La contraseña es incorrecta';
+            break;
+
+          case 'auth/user-not-found':
+            message = 'Usuario no encontrado.';
+            break;
+
           default:
             break;
         }
 
         this.appService.presentToast(message);
+        console.log(error);
       }
 
       await loading.dismiss();

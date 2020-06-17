@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/services/app.service';
-import { LoadingController, NavController } from '@ionic/angular';
+import { LoadingController, NavController, AlertController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Post } from '../../models/post.model';
 import { ActivatedRoute } from '@angular/router';
@@ -20,6 +20,7 @@ export class EditPostPage implements OnInit {
     private navCtrl: NavController,
     private firestore: AngularFirestore,
     private actRoute: ActivatedRoute,
+    private alertCtrl: AlertController
   ) {
     this.id = this.actRoute.snapshot.paramMap.get("id"); //captura el ID
   }
@@ -74,6 +75,32 @@ export class EditPostPage implements OnInit {
       //redirect to home
       this.navCtrl.navigateRoot("admin");
     }
+  }
+
+  async presentAlertConfirm(id: string) {
+    const alert = await this.alertCtrl.create({
+      header: 'Confirm!',
+      message: 'Desea eliminar este aviso?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Eliminar',
+          handler: () => {
+            console.log('Confirm Okay');
+            this.appService.deletePost(this.id);
+            this.navCtrl.navigateRoot('admin');
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   formValidation() {

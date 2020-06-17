@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 import { AppService } from 'src/app/services/app.service';
 import { User } from '../../models/user.model';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +14,9 @@ export class RegisterPage implements OnInit {
 
   constructor(
     private loadingCtrl: LoadingController,
-    private appService: AppService
+    private appService: AppService,
+    private authService: AuthService,
+    private navCtrl: NavController
   ) { }
 
   ngOnInit() {
@@ -25,14 +28,17 @@ export class RegisterPage implements OnInit {
 
       //show loading
       let loading = await this.loadingCtrl.create({
-        message:'Please wait..'
+        message: 'Please wait..'
       });
-
       await loading.present();
 
       try {
 
-        await this.appService.register(this.user);
+        await this.authService.onRegister(this.user);
+        if (this.user) {
+          console.log("Usuario creado con exito");
+          this.navCtrl.navigateRoot('home');
+        }
 
       } catch (error) {
 

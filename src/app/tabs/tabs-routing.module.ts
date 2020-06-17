@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { AuthGuard } from '../guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -25,7 +26,8 @@ const routes: Routes = [
       },
       {
         path: 'admin',
-        loadChildren: () => import('../pages/admin/admin.module').then(m => m.AdminPageModule)
+        loadChildren: () => import('../pages/admin/admin.module').then(m => m.AdminPageModule),
+        canActivate:[AuthGuard]
       },
       {
         path: 'register',
@@ -37,7 +39,8 @@ const routes: Routes = [
       },
       {
         path: 'edit-post/:id',
-        loadChildren: () => import('../pages/edit-post/edit-post.module').then(m => m.EditPostPageModule)
+        loadChildren: () => import('../pages/edit-post/edit-post.module').then(m => m.EditPostPageModule),
+        canActivate:[AuthGuard]
       },
       {
         path: '',
@@ -48,6 +51,11 @@ const routes: Routes = [
   },
   {
     path: '',
+    redirectTo: '/tabs/home',
+    pathMatch: 'full'
+  },
+  {
+    path: 'home',
     redirectTo: '/tabs/home',
     pathMatch: 'full'
   },
@@ -70,6 +78,12 @@ const routes: Routes = [
     path: 'detail/:id',
     redirectTo: '/tabs/detail/:id',
     pathMatch: 'full'
+  },
+  {
+    path: 'edit-post/:id',
+    redirectTo: '/tabs/edit-post/:id',
+    pathMatch: 'full',
+    canActivate:[AuthGuard]
   }
 ];
 

@@ -58,42 +58,25 @@ export class AppService {
     return true;
   }
 
-  async register(user: User) {
-
-    try {
-      return this.afAuth.createUserWithEmailAndPassword(user.email, user.password)
-        .then(data => {
-          console.log(data);
-
-          //redirect   to home
-          this.navCtrl.navigateRoot("home");
-        }
-        );
-
-    } catch (error) {
-      this.showToast(error);
-    }
-  }
-
-  async login(user: User) {
-    try {
-      return this.afAuth.signInWithEmailAndPassword(user.email, user.password)
-        .then(data => {
-          console.log(data);
-
-          this.navCtrl.navigateRoot("admin");
-        })
-
-    } catch (error) {
-      this.showToast(error);
-    }
-  }
-
   async getPostById(id: string) {
     try {
       return this.firestore.doc("posts/" + id);
     } catch (error) {
       this.presentToast(error);
+    }
+  }
+
+  async deletePost(id: string) {
+
+    try {
+
+      return await this.firestore.doc("posts/" + id).delete();
+
+    } catch (error) {
+
+      this.presentToast(error);
+      console.log(error);
+
     }
   }
 
