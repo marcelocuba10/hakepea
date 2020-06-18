@@ -51,11 +51,12 @@ export class AppService {
   }
 
   formValidation(post: Post) {
-    if (!post.detail) {
-      this.presentToast("Enter detail");
+    if (!post.detail || post.detail == "") {
+      this.presentToast("Ingrese una descripción");
       return false;
+    } else {
+      return true;
     }
-    return true;
   }
 
   async getPostById(id: string) {
@@ -80,17 +81,17 @@ export class AppService {
     }
   }
 
-  // async getPosts() {
-  //   try {
-  //     return this.firestore.collection("posts").valueChanges();
-  //   } catch (error) {
-  //     this.presentToast(error);
-  //   }
-  // }
+  async getPosts() {
+    try {
+      return await this.firestore.collection("posts").valueChanges();
+    } catch (error) {
+      this.presentToast(error);
+    }
+  }
 
   async getCards() {
     try {
-      return this.firestore.collection("about").valueChanges();
+      return await this.firestore.collection("about").valueChanges();
     } catch (error) {
       this.presentToast(error);
     }

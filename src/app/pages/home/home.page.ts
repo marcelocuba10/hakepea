@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/services/app.service';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { first } from 'rxjs/operators';
+import * as firebase from 'firebase';
 
 import {
   Plugins,
@@ -7,7 +10,6 @@ import {
   PushNotificationToken,
   PushNotificationActionPerformed
 } from '@capacitor/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 
 const { PushNotifications } = Plugins;
 
@@ -20,6 +22,7 @@ export class HomePage implements OnInit {
 
   posts: any;
   contentLoaded = false; //skeleton variable
+  postList: [];
 
   constructor(
     private appService: AppService,
@@ -33,6 +36,7 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.getPosts();
 
+    //this.postList = this.initializePosts();
     console.log('Initializing HomePage');
 
     // Request permission to use push notifications
@@ -76,21 +80,64 @@ export class HomePage implements OnInit {
     );
   }
 
+  // search(evt) {
+  //   var key: string = evt.target.value;
+  //   var lowerCaseKey = key.toLowerCase();
+  //   if (lowerCaseKey.length > 0) {
+  //     this.firestore.collection("posts",orderByChild("detail").startAt(lowerCaseKey).endAt(lowerCaseKey + "\uf8ff"))
+  //       .once("value", snapshot => {
+  //         this.postList = [];
+
+  //         snapshot.forEach(childSnap => {
+  //           this.postList.push(childSnap.val());
+  //         })
+  //       })
+  //   } else {
+  //     this.postList = [];
+  //   }
+
+  // }
+
+
+  //searchbar option 1 
+  // async initializePosts() {
+  //   const postList = await this.firestore.collection("posts", ref => ref.orderBy("timestamp", "desc")).valueChanges().pipe(first()).toPromise();
+  //   return postList;
+  // }
+
+  // async filterList(evt) {
+  //   console.log(evt);
+  //   this.postList = await this.initializePosts();
+  //   const searchTerm = evt.srcElement.value;
+
+  //   if (!searchTerm) {
+  //     return;
+  //   }
+
+  //   this.postList = this.postList.filter(currentPost => {
+  //     if (currentPost.detail && searchTerm) {
+  //       return (currentPost.detail.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 || currentPost.category.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
+  //     }
+  //   })
+  // }
+
   async getPosts() {
     //previamente se mostrara el skeleton
 
     try {
+
+      //this.firestore.collection('posts',ref=> ref.orderBy("date").limit(3));
+
       // (await this.appService.getPosts()).subscribe(data => {
       //   this.posts = data;
-      //   console.log(this.posts);
-      //   console.log(this.posts.id);
-      //   console.log(this.posts.postId);
+      //   console.log(data);
       // })
 
       //dejo de funcionar y no me traia el id del item, no se porque?
 
       //metodo antiguo sin service
-      this.firestore.collection("posts").snapshotChanges().subscribe(
+
+      this.firestore.collection("posts", ref => ref.orderBy("timestamp", "desc")).snapshotChanges().subscribe(
         data => {
           this.posts = data.map(e => {
             return {
@@ -102,6 +149,7 @@ export class HomePage implements OnInit {
             };
           });
         });
+
     } catch (error) {
       this.appService.presentToast(error);
     }

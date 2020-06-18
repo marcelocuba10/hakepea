@@ -34,10 +34,11 @@ export class AddPostPage implements OnInit {
 
       try {
         this.post.date = moment().format('MMMM Do YYYY, h:mm a');
+        this.post.timestamp = Date.now();
         await this.firestore.collection("posts").add(post);
 
       } catch (error) {
-        this.appService.showToast(error);
+        this.appService.presentToast(error);
       }
 
       await loading.dismiss();
@@ -57,7 +58,7 @@ export class AddPostPage implements OnInit {
 
   formValidation() {
     if (!this.post.detail) {
-      this.appService.showToast("Enter detail");
+      this.appService.presentToast("Enter detail");
       return false;
     }
 

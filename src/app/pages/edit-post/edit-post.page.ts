@@ -32,7 +32,7 @@ export class EditPostPage implements OnInit {
   async getPostById(id: string) {
     //show loading
     let loading = await this.loadingCtrl.create({
-      message: "Please wait..."
+      message: "Por favor espere..."
     });
 
     await loading.present();
@@ -54,20 +54,19 @@ export class EditPostPage implements OnInit {
   }
 
   async updatePost(post: Post) {
-
-    if (this.formValidation) {
+    if (this.formValidation()) {  //formValidation devuelve , true o false
       //show loading
       let loading = await this.loadingCtrl.create({
-        message: "Please wait..."
+        message: "Por favor espere..."
       });
 
       await loading.present();
 
       try {
         await this.firestore.doc("posts/" + this.id).update(post);
-
       } catch (error) {
         this.appService.showToast(error);
+        console.log(error);
       }
 
       //dismiss loading
@@ -105,10 +104,11 @@ export class EditPostPage implements OnInit {
 
   formValidation() {
     if (!this.post.detail) {
-      this.appService.showToast("Enter detail");
+      this.appService.presentToast("Ingrese una descripción");
       return false;
+    } else {
+      return true;
     }
-    return true;
   }
 
   categories = [

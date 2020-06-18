@@ -3,4 +3,5 @@ export interface Post{
     category?:string;
     date?: string;
     imgpath?: string;
+    timestamp?:number;
 }

@@ -23,6 +23,7 @@ export class DetailPage implements OnInit {
 
   ngOnInit() {
     this.getPostById(this.id);
+    
   }
 
   async getPostById(id: string) {
