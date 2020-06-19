@@ -3,6 +3,7 @@ import { AppService } from 'src/app/services/app.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { LoadingController, NavController, AlertController } from '@ionic/angular';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -19,7 +20,8 @@ export class AdminPage implements OnInit {
     private loadingCtrl: LoadingController,
     private navCtrl: NavController,
     private afAuth: AngularFireAuth,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private actRoute: ActivatedRoute
   ) {
     setTimeout(() => {
       this.contentLoaded = true;
@@ -34,9 +36,8 @@ export class AdminPage implements OnInit {
     //previamente se mostrara el skeleton
 
     try {
-      this.firestore.collection("posts").
-        snapshotChanges().
-        subscribe(data => {
+      this.firestore.collection("posts", ref => ref.orderBy("timestamp", "desc")).snapshotChanges().subscribe(
+        data => {
           this.posts = data.map(e => {
             return {
               id: e.payload.doc.id,
@@ -48,22 +49,33 @@ export class AdminPage implements OnInit {
           });
         });
     } catch (error) {
-      this.appService.showToast(error);
+      this.appService.presentToast(error);
     }
   }
 
-  async deletePost(id: string) {
-    //show loader
-    let loader = await this.loadingCtrl.create({
-      message: "Please wait..."
+  async presentAlertConfirmDelete(id: string) {
+    const alert = await this.alertCtrl.create({
+      header: 'Confirm!',
+      message: 'Desea eliminar este aviso?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Eliminar',
+          handler: async () => {
+            console.log('Confirm Okay');
+            this.appService.deletePost(id);
+            this.navCtrl.navigateRoot('admin');
+          }
+        }
+      ]
     });
-
-    await loader.present();
-
-    await this.firestore.doc("posts/" + id).delete();
-
-    //dismiss loader
-    await loader.dismiss();
+    await alert.present();
   }
 
   async onLogout() {

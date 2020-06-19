@@ -68,16 +68,11 @@ export class AppService {
   }
 
   async deletePost(id: string) {
-
     try {
-
       return await this.firestore.doc("posts/" + id).delete();
-
     } catch (error) {
-
       this.presentToast(error);
       console.log(error);
-
     }
   }
 

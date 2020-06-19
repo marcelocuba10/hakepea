@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar color="tertiary">
+  <ion-toolbar color="warning">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -37,7 +37,7 @@
         </ion-item-options>
 
         <ion-item-options side="end">
-          <ion-item-option color="danger" (click)="deletePost(post.id)">
+          <ion-item-option color="danger" (click)="presentAlertConfirmDelete(post.id)">
             <ion-icon slot="icon-only" name="trash"></ion-icon>
           </ion-item-option>
         </ion-item-options>

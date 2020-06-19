@@ -98,7 +98,6 @@ export class EditPostPage implements OnInit {
         }
       ]
     });
-
     await alert.present();
   }
 
