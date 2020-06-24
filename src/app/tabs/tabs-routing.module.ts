@@ -43,6 +43,10 @@ const routes: Routes = [
         canActivate:[AuthGuard]
       },
       {
+        path: 'disclaimer',
+        loadChildren: () => import('../pages/disclaimer/disclaimer.module').then(m => m.DisclaimerPageModule)
+      },
+      {
         path: '',
         redirectTo: '/tabs/home',
         pathMatch: 'full'

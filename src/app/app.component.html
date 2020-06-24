@@ -19,13 +19,19 @@
           <ion-menu-toggle auto-hide="false">
             <ion-item [routerLink]="['/login']">
               <ion-icon name="person" slot="start"></ion-icon>
-              <ion-label>Moderador</ion-label>
+              <ion-label>Admin</ion-label>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
             <ion-item>
               <ion-icon name="settings" slot="start"></ion-icon>
               <ion-label>Settings</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item [routerLink]="['/tabs/disclaimer']">
+              <ion-icon name="reader-outline" slot="start"></ion-icon>
+              <ion-label>Aviso Legal</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
