@@ -43,6 +43,10 @@ const routes: Routes = [
   },  {
     path: 'disclaimer',
     loadChildren: () => import('./pages/disclaimer/disclaimer.module').then( m => m.DisclaimerPageModule)
+  },
+  {
+    path: 'teste',
+    loadChildren: () => import('./pages/teste/teste.module').then( m => m.TestePageModule)
   }
 
 
