@@ -35,6 +35,9 @@ export class AddPostPage implements OnInit {
       try {
         this.post.date = moment().format('MMMM Do YYYY, h:mm a');
         this.post.timestamp = Date.now();
+        this.post.liked = 0.05;
+        this.post.disliked = 0;
+
         await this.firestore.collection("posts").add(post);
 
       } catch (error) {
@@ -107,7 +110,29 @@ export class AddPostPage implements OnInit {
   ];
 
   OnClick(category) {
-    this.post.category = category.name;
+    //pasamos la categoria selecionada al objeto post.categoria
+    switch (category.name) {
+      case category.name = "Caminera":
+        this.post.category = "Policía Caminera";
+        break;
+      case category.name = "Nacional":
+        this.post.category = "Policía Nacional"
+        break;
+      case category.name = "Municipal":
+        this.post.category = "Policía Municipal"
+        break;
+      case category.name = "Trafico":
+        this.post.category = category.name;
+        break;
+      case category.name = "Accidente":
+        this.post.category = "Accidente de Tránsito";
+        break;
+      case category.name = "Obras":
+        this.post.category = "Obras de Construcción";
+        break;
+      default:
+        break;
+    }
     this.post.imgpath = category.imgpath;
   }
 

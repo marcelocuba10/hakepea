@@ -7,7 +7,7 @@
       <ion-title>New post</ion-title>
       <ion-buttons slot="primary">
         <ion-button>
-          <ion-icon slot="icon-only" name="star"></ion-icon>
+          <ion-icon name="ellipsis-vertical-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
@@ -17,16 +17,12 @@
     <ion-list lines="full">
       <ion-item>
         <ion-label style="margin-bottom: 10px;" position="floating">Aviso aquí:</ion-label>
-        <ion-textarea maxlength="500"  clearInput="true" minlength="20" required type="text" [(ngModel)]="post.detail" placeholder="Escribe una descripción...">
+        <ion-textarea maxlength="500" class="ion-text-capitalize" clearInput="true" minlength="20" required type="text" [(ngModel)]="post.detail" placeholder="Escribe una descripción...">
         </ion-textarea>
       </ion-item>
       <ion-item>
         <ion-label style="margin-bottom: 10px;" position="floating">Categoría:</ion-label>
         <ion-input readonly type="text" placeholder="..." [(ngModel)]="post.category"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label style="margin-bottom: 10px;" position="floating">imgpath:</ion-label>
-        <ion-input readonly type="text" placeholder="..." [(ngModel)]="post.imgpath"></ion-input>
       </ion-item>
     </ion-list>
 

@@ -4,4 +4,6 @@ export interface Post{
     date?: string;
     imgpath?: string;
     timestamp?:number;
+    liked?:number;
+    disliked?:number;
 }

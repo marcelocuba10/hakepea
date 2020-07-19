@@ -49,7 +49,7 @@ export class EditPostPage implements OnInit {
       await loading.dismiss();
 
     } catch (error) {
-      this.appService.showToast(error);
+      this.appService.presentToast(error);
     }
   }
 
@@ -65,8 +65,7 @@ export class EditPostPage implements OnInit {
       try {
         await this.firestore.doc("posts/" + this.id).update(post);
       } catch (error) {
-        this.appService.showToast(error);
-        console.log(error);
+        this.appService.presentToast(error);
       }
 
       //dismiss loading
@@ -151,7 +150,29 @@ export class EditPostPage implements OnInit {
   ];
 
   OnClick(category) {
-    this.post.category = category.name;
+    //pasamos la categoria selecionada al objeto post.categoria
+    switch (category.name) {
+      case category.name = "Caminera":
+        this.post.category = "Policía Caminera";
+        break;
+      case category.name = "Nacional":
+        this.post.category = "Policía Nacional"
+        break;
+      case category.name = "Municipal":
+        this.post.category = "Policía Municipal"
+        break;
+      case category.name = "Trafico":
+        this.post.category = category.name;
+        break;
+      case category.name = "Accidente":
+        this.post.category = "Accidente de Tránsito";
+        break;
+      case category.name = "Obras":
+        this.post.category = "Obras de Construcción";
+        break;
+      default:
+        break;
+    }
     this.post.imgpath = category.imgpath;
   }
 

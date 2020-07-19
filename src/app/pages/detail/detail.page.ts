@@ -3,6 +3,7 @@ import { LoadingController, NavController } from '@ionic/angular';
 import { Post } from '../../models/post.model';
 import { ActivatedRoute } from '@angular/router';
 import { AppService } from '../../services/app.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-detail',
@@ -17,13 +18,13 @@ export class DetailPage implements OnInit {
     private appService: AppService,
     private loadingCtrl: LoadingController,
     private actRoute: ActivatedRoute,
+    private firestore: AngularFirestore
   ) {
     this.id = this.actRoute.snapshot.paramMap.get("id"); //captura el ID
   }
 
   ngOnInit() {
     this.getPostById(this.id);
-    
   }
 
   async getPostById(id: string) {
@@ -42,6 +43,8 @@ export class DetailPage implements OnInit {
           this.post.category = data["category"];
           this.post.date = data["date"];
           this.post.imgpath = data["imgpath"];
+          this.post.liked = data["liked"];
+          this.post.disliked = data["disliked"];
           console.log(this.post);
         }
       );
@@ -59,6 +62,26 @@ export class DetailPage implements OnInit {
 
     } catch (error) {
       this.appService.presentToast(error);
+    }
+  }
+
+  async increaseProgressUp() {
+    this.post.liked += 0.05;
+    try {
+      await this.firestore.doc("posts/" + this.id).update(this.post);
+    } catch (error) {
+      this.appService.presentToast(error);
+      console.log(error);
+    }
+  }
+
+  async increaseProgressDown() {
+    this.post.disliked += 0.05;
+    try {
+      await this.firestore.doc("posts/" + this.id).update(this.post);
+    } catch (error) {
+      this.appService.presentToast(error);
+      console.log(error);
     }
   }
 
