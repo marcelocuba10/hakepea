@@ -13,6 +13,9 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class DetailPage implements OnInit {
   post = {} as Post;
   id: any;
+  likeOneTime = 0; //el boton like o dislike, solo se puede contar una vez
+  countLike: number;
+  countDislike: number;
 
   constructor(
     private appService: AppService,
@@ -46,6 +49,9 @@ export class DetailPage implements OnInit {
           this.post.liked = data["liked"];
           this.post.disliked = data["disliked"];
           console.log(this.post);
+
+          this.countLike = this.post.liked * 0.1;
+          this.countDislike = this.post.disliked * 0.1;
         }
       );
 
@@ -66,25 +72,56 @@ export class DetailPage implements OnInit {
   }
 
   async increaseProgressUp() {
-    this.post.liked += 0.05;
-    try {
-      await this.firestore.doc("posts/" + this.id).update(this.post);
-    } catch (error) {
-      this.appService.presentToast(error);
-      console.log(error);
+
+    if (this.likeOneTime == 0) {
+      this.likeOneTime = 1;
+      this.post.liked += 1;
+
+      try {
+        await this.firestore.doc("posts/" + this.id).update(this.post);
+      } catch (error) {
+        this.appService.presentToast(error);
+        console.log(error);
+      }
+
+    } else if (this.likeOneTime == 1) {
+      this.post.liked -= 1;
+      this.likeOneTime = 0;
+      try {
+        await this.firestore.doc("posts/" + this.id).update(this.post);
+      } catch (error) {
+        this.appService.presentToast(error);
+        console.log(error);
+      }
     }
+
   }
 
   async increaseProgressDown() {
-    this.post.disliked += 0.05;
-    try {
-      await this.firestore.doc("posts/" + this.id).update(this.post);
-    } catch (error) {
-      this.appService.presentToast(error);
-      console.log(error);
-    }
-  }
 
+    if (this.likeOneTime == 0) {
+      this.likeOneTime = 2;
+      this.post.disliked += 1;
+      try {
+        await this.firestore.doc("posts/" + this.id).update(this.post);
+      } catch (error) {
+        this.appService.presentToast(error);
+        console.log(error);
+      }
+
+    } else if (this.likeOneTime == 2) {
+      this.post.disliked -= 1;
+      this.likeOneTime = 0;
+      try {
+        await this.firestore.doc("posts/" + this.id).update(this.post);
+      } catch (error) {
+        this.appService.presentToast(error);
+        console.log(error);
+      }
+    }
+
+  }
+  
   OnClick(category) {
     this.post.category = category.name;
     this.post.imgpath = category.imgpath;

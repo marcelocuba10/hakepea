@@ -35,7 +35,7 @@ export class AddPostPage implements OnInit {
       try {
         this.post.date = moment().format('MMMM Do YYYY, h:mm a');
         this.post.timestamp = Date.now();
-        this.post.liked = 0.05;
+        this.post.liked = 1;
         this.post.disliked = 0;
 
         await this.firestore.collection("posts").add(post);

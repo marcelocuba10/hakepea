@@ -4,7 +4,7 @@
       <ion-buttons slot="start">
         <ion-back-button defaultHref="/"></ion-back-button>
       </ion-buttons>
-      <ion-title class="ion-text-center">Detalle</ion-title>
+      <ion-title class="ion-text-center">Detalle - Aviso</ion-title>
       <ion-buttons slot="primary">
         <ion-button>
           <ion-icon name="ellipsis-vertical-outline"></ion-icon>
@@ -26,8 +26,35 @@
         <hr>
         <ion-card-subtitle>La información es correcta? Por favor, califique el aviso</ion-card-subtitle>
         <br>
-        <ion-progress-bar class="ion-padding-bottom ion-margin-bottom" color="secondary" value={{post.liked}} buffer="0.1"></ion-progress-bar>
-        <ion-progress-bar class="ion-padding-bottom ion-margin-bottom" color="danger" value={{post.disliked}} buffer="0.1"></ion-progress-bar>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="10">
+              <div>
+                <ion-progress-bar class="ion-padding-bottom ion-margin-bottom" color="success" value={{countLike}}
+                  buffer="0.1"></ion-progress-bar>
+              </div>
+            </ion-col>
+            <ion-col size="2">
+              <div>
+                {{post.liked}}<ion-icon color="success" name="thumbs-up-outline"></ion-icon>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="10">
+              <div>
+                <ion-progress-bar class="ion-padding-bottom ion-margin-bottom" color="danger" value={{countDislike}}
+                  buffer="0.1"></ion-progress-bar>
+              </div>
+            </ion-col>
+            <ion-col size="2">
+              <div>
+                {{post.disliked}}<ion-icon color="danger" name="thumbs-down-outline"></ion-icon>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
         <div>
           <ion-chip outline color="success" (click)="increaseProgressUp()">
             <ion-icon color="success" name="thumbs-up-outline"></ion-icon>
