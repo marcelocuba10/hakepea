@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title style="font-size: small;">
+    <ion-title style="font-size: small;" class="ion-text-center">
       HakePea, Red Social del Conductor
     </ion-title>
     <ion-buttons slot="primary">
@@ -22,19 +22,30 @@
   </ion-searchbar>
   <div *ngIf="contentLoaded">
     <ion-list-header>Alertas en ruta:</ion-list-header>
+
     <ion-list *ngFor="let post of posts">
-      <ion-item-sliding>
-        <ion-item class="no-padding" lines="inset" button [routerLink]="['../../detail/',post.id]">
-          <ion-thumbnail slot="start">
-            <img src="{{post.imgpath}}">
-          </ion-thumbnail>
-          <ion-label>
-            <h3>{{post.detail}}</h3>
-            <p>{{post.category}}</p>
-            <p>{{post.date}}</p>
-          </ion-label>
-        </ion-item>
-      </ion-item-sliding>
+      <ion-item class="no-padding" lines="inset" button [routerLink]="['../../detail/',post.id]">
+        <ion-thumbnail slot="start">
+          <img src="{{post.imgpath}}">
+        </ion-thumbnail>
+        <ion-label>
+          <ion-row>
+            <ion-col size="10">
+              <div class="ion-text-wrap">
+                <h3 style="color: #3880ff;">{{post.category}}</h3>
+                <p>{{post.detail}}</p>
+                <p>{{post.date}}</p>
+              </div>
+            </ion-col>
+            <ion-col size="2">
+              <div style="margin-top: 14px;">
+                <ion-row>{{post.liked}}<ion-icon color="success" name="thumbs-up-outline"></ion-icon></ion-row>
+                <ion-row>{{post.disliked}}<ion-icon color="danger" name="thumbs-down-outline"></ion-icon></ion-row>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-label>
+      </ion-item>
     </ion-list>
   </div>
 

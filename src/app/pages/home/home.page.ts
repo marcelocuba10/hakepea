@@ -145,7 +145,9 @@ export class HomePage implements OnInit {
               detail: e.payload.doc.data()["detail"],
               category: e.payload.doc.data()["category"],
               date: e.payload.doc.data()["date"],
-              imgpath: e.payload.doc.data()["imgpath"]
+              imgpath: e.payload.doc.data()["imgpath"],
+              liked: e.payload.doc.data()["liked"],
+              disliked: e.payload.doc.data()["disliked"]
             };
           });
         });
@@ -154,5 +156,4 @@ export class HomePage implements OnInit {
       this.appService.presentToast(error);
     }
   }
-
 }

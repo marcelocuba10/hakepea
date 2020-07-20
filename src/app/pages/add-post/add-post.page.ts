@@ -27,7 +27,7 @@ export class AddPostPage implements OnInit {
     if (this.formValidation()) {
       //show loading
       let loading = await this.loadingCtrl.create({
-        message: "Please wait"
+        message: "Por favor, espere.."
       });
 
       await loading.present();
@@ -61,7 +61,12 @@ export class AddPostPage implements OnInit {
 
   formValidation() {
     if (!this.post.detail) {
-      this.appService.presentToast("Enter detail");
+      this.appService.presentToast("Ingrese contenido al aviso");
+      return false;
+    }
+
+    if (!this.post.category) {
+      this.appService.presentToast("Seleccione una categoría");
       return false;
     }
 
