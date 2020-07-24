@@ -15,57 +15,64 @@
 
   <ion-content [fullscreen]="true">
 
-    <ion-card class="ion-text-center">
-      <ion-card-header>
-        <hr>
-        <ion-card-subtitle>Aviso:</ion-card-subtitle>
-        <ion-card-title>{{post.category}}</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>{{post.detail}}</ion-card-content>
-      <ion-card-content>
-        <hr>
-        <ion-card-subtitle>La información es correcta? Por favor, califique el aviso</ion-card-subtitle>
-        <br>
-        <ion-grid>
-          <ion-row>
-            <ion-col size="10">
-              <div>
-                <ion-progress-bar class="ion-padding-bottom ion-margin-bottom" color="success" value={{countLike}}
-                  buffer="0.1"></ion-progress-bar>
-              </div>
-            </ion-col>
-            <ion-col size="2">
-              <div>
-                {{post.liked}}<ion-icon color="success" name="thumbs-up-outline"></ion-icon>
-              </div>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col size="10">
-              <div>
-                <ion-progress-bar class="ion-padding-bottom ion-margin-bottom" color="danger" value={{countDislike}}
-                  buffer="0.1"></ion-progress-bar>
-              </div>
-            </ion-col>
-            <ion-col size="2">
-              <div>
-                {{post.disliked}}<ion-icon color="danger" name="thumbs-down-outline"></ion-icon>
-              </div>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-
-        <div>
+    <ion-card style="border: ridge;">
+      <ion-row>
+        <ion-col size="3" class="ion-text-center">
+          <ion-avatar class="avatar-align">
+            <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg">
+          </ion-avatar>
+          <ion-label>Conductor #233</ion-label>
+        </ion-col>
+        <ion-col size="9">
+          <ion-card-header>
+            <ion-card-subtitle>{{post.date}}</ion-card-subtitle>
+            <ion-card-title>{{post.detail}}</ion-card-title>
+            <ion-card-subtitle style="color: #4c8dff;">{{post.category}}</ion-card-subtitle>
+          </ion-card-header>
+        </ion-col>
+      </ion-row>
+      <hr>
+      <ion-row>
+        <ion-card-header class="ion-text-center">
+          <ion-card-subtitle>La información es correcta? Por favor, califique el aviso</ion-card-subtitle>
+          <ion-grid style="margin: 10px 0px;">
+            <ion-row>
+              <ion-col size="9">
+                <div>
+                  <ion-progress-bar class="ion-padding-bottom ion-margin-bottom" color="success" value={{countLike}}
+                    buffer="0.1"></ion-progress-bar>
+                </div>
+              </ion-col>
+              <ion-col size="3">
+                <div>
+                  <ion-label class="p-font p-color-up">{{post.liked}}</ion-label><ion-icon name="thumbs-up" class="icon-spacing icon-color-up"></ion-icon>
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="9">
+                <div>
+                  <ion-progress-bar class="ion-padding-bottom ion-margin-bottom" color="danger" value={{countDislike}}
+                    buffer="0.1"></ion-progress-bar>
+                </div>
+              </ion-col>
+              <ion-col size="3">
+                <div>
+                  <ion-label class="p-font p-color-down">{{post.disliked}}</ion-label><ion-icon name="thumbs-down" class="icon-spacing icon-color-down"></ion-icon>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
           <ion-chip outline color="success" (click)="increaseProgressUp()">
-            <ion-icon color="success" name="thumbs-up-outline"></ion-icon>
+            <ion-icon color="success" name="thumbs-up"></ion-icon>
             <ion-label color="success">Verdadero</ion-label>
           </ion-chip>
           <ion-chip outline color="danger" (click)="increaseProgressDown()">
-            <ion-icon color="danger" name="thumbs-down-outline"></ion-icon>
+            <ion-icon color="danger" name="thumbs-down"></ion-icon>
             <ion-label color="danger">Falso</ion-label>
           </ion-chip>
-        </div>
-      </ion-card-content>
+        </ion-card-header>
+      </ion-row>
     </ion-card>
   </ion-content>
 </ion-app>

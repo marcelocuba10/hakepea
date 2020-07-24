@@ -30,17 +30,21 @@
         </ion-thumbnail>
         <ion-label>
           <ion-row>
-            <ion-col size="10">
+            <ion-col size="9.5">
               <div class="ion-text-wrap">
                 <h3 style="color: #3880ff;">{{post.category}}</h3>
                 <p>{{post.detail}}</p>
                 <p>{{post.date}}</p>
               </div>
             </ion-col>
-            <ion-col size="2">
-              <div style="margin-top: 14px;">
-                <ion-row>{{post.liked}}<ion-icon color="success" name="thumbs-up-outline"></ion-icon></ion-row>
-                <ion-row>{{post.disliked}}<ion-icon color="danger" name="thumbs-down-outline"></ion-icon></ion-row>
+            <ion-col size="2.5">
+              <div style="margin-top: 45%;display: block;float: right;">
+                <ion-row>
+                  <ion-label class="p-font p-color-up">{{post.liked}}</ion-label><ion-icon name="thumbs-up" class="icon-spacing icon-color-up"></ion-icon>
+                </ion-row>
+                <ion-row>
+                  <ion-label class="p-font p-color-down">{{post.disliked}}</ion-label><ion-icon name="thumbs-down" style="margin-top: 3px;" class="icon-spacing icon-color-down"></ion-icon>
+                </ion-row>
               </div>
             </ion-col>
           </ion-row>
