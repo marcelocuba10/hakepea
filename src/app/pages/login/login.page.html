@@ -1,28 +1,47 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="warning">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>login</ion-title>
+    <ion-title class="ion-text-center">Moderador</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button>
+        <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-item>
-    <ion-label position="floating">E-mail</ion-label>
-    <ion-input type="email" required [(ngModel)]="user.email"></ion-input>
-  </ion-item>
+<ion-content class="ion-text-center">
 
-  <ion-item>
-    <ion-label position="floating">Password</ion-label>
-    <ion-input type="password" required [(ngModel)]="user.password"></ion-input>
-  </ion-item>
+  <body>
+    <aside>&nbsp;</aside>
+    <main>&nbsp;</main>
+  </body>
 
-  <ion-button class="ion-padding" expand="full" color="primary" (click)="login()">
-    Login
-  </ion-button>
 
-  <ion-button class="ion-padding" expand="full" color="light" [routerLink]="['../../register']">
-    Register
-  </ion-button>
+  <ion-card class="card-style">
+    <ion-card-header>
+      <ion-card-title>Iniciar Sesión</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-input type="email" required [(ngModel)]="user.email" placeholder="Email">
+          <ion-icon name="person-outline"></ion-icon>&nbsp;&nbsp;
+        </ion-input>
+      </ion-item>
+      <ion-item class="ion-margin-top">
+        <ion-input type="password" required [(ngModel)]="user.password" placeholder="Contraseña">
+          <ion-icon name="key-outline"></ion-icon>&nbsp;&nbsp;
+        </ion-input>
+      </ion-item>
+      <ion-button class="ion-padding" size="default" color="primary" (click)="login()">
+        Entrar
+      </ion-button>
+      <!-- <ion-button class="ion-padding" expand="full" color="light" [routerLink]="['../../register']">
+        Registrar
+      </ion-button> -->
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>
