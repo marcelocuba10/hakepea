@@ -33,7 +33,7 @@ export class AddPostPage implements OnInit {
       await loading.present();
 
       try {
-        this.post.date = moment().format('MMMM Do YYYY, h:mm a');
+        this.post.date = moment().lang('es').format('dddd, D MMMM, h:mm a'); 
         this.post.timestamp = Date.now();
         this.post.liked = 1;
         this.post.disliked = 0;

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController, NavController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
 import { Post } from '../../models/post.model';
 import { ActivatedRoute } from '@angular/router';
 import { AppService } from '../../services/app.service';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Comment } from '../../models/comment.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-detail',
@@ -12,10 +14,13 @@ import { AngularFirestore } from '@angular/fire/firestore';
 })
 export class DetailPage implements OnInit {
   post = {} as Post;
+  comment = {} as Comment;
+  comments: any;
   id: any;
   likeOneTime = 0; //el boton like o dislike, solo se puede contar una vez
   countLike: number;
   countDislike: number;
+  driver: number;
 
   constructor(
     private appService: AppService,
@@ -28,6 +33,57 @@ export class DetailPage implements OnInit {
 
   ngOnInit() {
     this.getPostById(this.id);
+    this.getCommentById();
+    this.driver = Math.floor(Math.random() * 999) + 50
+  }
+
+  async CreateComment(comment: Comment) {
+    if (this.formValidation()) {
+      //show loading
+      let loading = await this.loadingCtrl.create({
+        message: "Por favor, espere.."
+      });
+
+      await loading.present();
+
+      try {
+        this.comment.date = moment().lang('es').format('dddd, D MMMM, h:mm a'); 
+        this.comment.timestamp = Date.now();
+        this.comment.driver = Math.floor(Math.random() * 999) + 50
+        this.comment.idPost = this.id;
+        await this.firestore.collection("comments").add(comment);
+      } catch (error) {
+        this.appService.presentToast(error);
+        console.log(error);
+      }
+      await loading.dismiss();
+      //Clear input
+      this.clearFieldComment()
+    }
+  }
+
+  clearFieldComment(){
+    this.comment.comment = '';
+  }
+
+  async getCommentById() {
+    try {
+      this.firestore.collection("comments", ref => ref.where("idPost","==",this.id).orderBy("timestamp", "desc")).snapshotChanges().subscribe(
+        data => {
+          this.comments = data.map(e => {
+            return {
+              id: e.payload.doc.id,
+              comment: e.payload.doc.data()["comment"],
+              date: e.payload.doc.data()["date"],
+              driver: e.payload.doc.data()["driver"],
+              idPost: e.payload.doc.data()["idPost"],
+            };
+          });
+        });
+    } catch (error) {
+      this.appService.presentToast(error);
+      console.log(error);
+    }
   }
 
   async getPostById(id: string) {
@@ -121,7 +177,15 @@ export class DetailPage implements OnInit {
     }
 
   }
-  
+
+  formValidation() {
+    if (!this.comment.comment) {
+      this.appService.presentToast("Ingrese comentario");
+      return false;
+    }
+    return true;
+  }
+
   OnClick(category) {
     this.post.category = category.name;
     this.post.imgpath = category.imgpath;
