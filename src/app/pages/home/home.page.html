@@ -21,10 +21,10 @@
   <ion-searchbar mode='ios' debounce="1000" animated placeholder="Buscar avisos..." (ionChange)="search($event)">
   </ion-searchbar>
   <div *ngIf="contentLoaded">
-    <ion-list-header>Alertas en ruta:</ion-list-header>
+    <ion-list-header>Avisos Recientes:</ion-list-header>
 
     <ion-list *ngFor="let post of posts">
-      <ion-item class="no-padding" lines="inset" button [routerLink]="['../../detail/',post.id]">
+      <ion-item class="no-padding" lines="full" button [routerLink]="['../../detail/',post.id]">
         <ion-thumbnail slot="start">
           <img src="{{post.imgpath}}">
         </ion-thumbnail>
@@ -34,7 +34,7 @@
               <div class="ion-text-wrap">
                 <h3 style="color: #3880ff; font-weight: 500;">{{post.category}}</h3>
                 <p>{{post.detail}}</p>
-                <p><sub>{{post.date}}</sub></p>
+                <p style="color: #187b26;font-weight: 500;"><sub>{{post.date}}</sub></p>
               </div>
             </ion-col>
             <ion-col size="2.5">

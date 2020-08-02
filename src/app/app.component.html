@@ -19,19 +19,37 @@
           <ion-menu-toggle auto-hide="false">
             <ion-item [routerLink]="['/login']">
               <ion-icon name="person" slot="start"></ion-icon>
-              <ion-label>Admin</ion-label>
+              <ion-label>Moderador</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item [routerLink]="['/tabs/disclaimer']">
+              <ion-icon name="receipt-sharp" slot="start"></ion-icon>
+              <ion-label>Aviso Legal</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item>
+              <ion-icon name="call-sharp" slot="start"></ion-icon>
+              <ion-label>Atención al Cliente</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item>
+              <ion-icon name="logo-facebook" slot="start"></ion-icon>
+              <ion-label>Síguenos en Facebook</ion-label>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
             <ion-item>
               <ion-icon name="settings" slot="start"></ion-icon>
-              <ion-label>Settings</ion-label>
+              <ion-label>Configuraciones</ion-label>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
-            <ion-item [routerLink]="['/tabs/disclaimer']">
-              <ion-icon name="reader-outline" slot="start"></ion-icon>
-              <ion-label>Aviso Legal</ion-label>
+            <ion-item>
+              <ion-icon name="share-social-sharp" slot="start"></ion-icon>
+              <ion-label>Compartir Hakepea</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
