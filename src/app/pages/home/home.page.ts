@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/services/app.service';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { first } from 'rxjs/operators';
-import * as firebase from 'firebase';
 
 import {
   Plugins,

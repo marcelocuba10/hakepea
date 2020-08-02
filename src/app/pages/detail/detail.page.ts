@@ -14,9 +14,10 @@ import * as moment from 'moment';
 })
 export class DetailPage implements OnInit {
   post = {} as Post;
+  id: any;
+
   comment = {} as Comment;
   comments: any;
-  id: any;
   likeOneTime = 0; //el boton like o dislike, solo se puede contar una vez
   countLike: number;
   countDislike: number;
@@ -104,10 +105,9 @@ export class DetailPage implements OnInit {
           this.post.imgpath = data["imgpath"];
           this.post.liked = data["liked"];
           this.post.disliked = data["disliked"];
-          console.log(this.post);
-
           this.countLike = this.post.liked * 0.1;
           this.countDislike = this.post.disliked * 0.1;
+          console.log(this.post);
         }
       );
 
@@ -150,7 +150,6 @@ export class DetailPage implements OnInit {
         console.log(error);
       }
     }
-
   }
 
   async increaseProgressDown() {
@@ -175,7 +174,6 @@ export class DetailPage implements OnInit {
         console.log(error);
       }
     }
-
   }
 
   formValidation() {

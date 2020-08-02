@@ -22,7 +22,7 @@
       </ion-item>
       <ion-item>
         <ion-label style="margin-bottom: 10px;" position="floating">Categoría:</ion-label>
-        <ion-input readonly type="text" placeholder="..." [(ngModel)]="post.category"></ion-input>
+        <ion-input readonly type="text" placeholder="Seleccione una Categoría.." [(ngModel)]="post.category"></ion-input>
       </ion-item>
     </ion-list>
 
@@ -37,6 +37,6 @@
       </ion-row>
     </ion-grid>
 
-    <ion-button style="margin: 20px 50px 0 50px;" expand="block" size="default" color="success" (click)="createPost(post)">Enviar</ion-button>
+    <ion-button style="margin: 20px 50px 0 50px;" expand="block" size="default" color="success" (click)="presentAlertConfirm(post)">Enviar</ion-button>
   </ion-content>
 </ion-app>

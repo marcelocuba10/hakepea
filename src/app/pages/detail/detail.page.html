@@ -79,7 +79,8 @@
     <h2 style="margin-left: 12px;">Comentarios:</h2>
     <ion-row style="height: 80px;">
       <ion-col size="10">
-        <ion-textarea maxlength="500" minlength="20" clear-on-edit="true" autocapitalize [(ngModel)]="comment.comment" placeholder="Ingrese un comentario.."></ion-textarea>
+        <ion-textarea maxlength="500" minlength="20" clear-on-edit="true" autocapitalize [(ngModel)]="comment.comment"
+          placeholder="Ingrese un comentario.."></ion-textarea>
       </ion-col>
       <ion-col size="2">
         <ion-chip color="secondary" style="margin-top: 13px;float: right;" (click)="CreateComment(comment)">
@@ -96,8 +97,6 @@
           <p style="font-weight: 500;">Conductor {{comment.driver}}</p>
           <p>{{comment.comment}}</p>
           <p style="color: #4c8dff;"><sub>{{comment.date}}</sub></p>
-          <!-- <textarea readonly class="ion-text-capitalize; ion-text-wrap" value="{{comment.comment}}" rows="3" cols="40"></textarea> -->
-          <!-- <p>{{comment.date}}</p> -->
         </ion-label>
       </ion-item>
     </ion-list>

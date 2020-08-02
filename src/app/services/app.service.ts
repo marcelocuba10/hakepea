@@ -76,6 +76,15 @@ export class AppService {
     }
   }
 
+  async deleteComment(id: string) {
+    try {
+      return await this.firestore.doc("comments/" + id).delete();
+    } catch (error) {
+      this.presentToast(error);
+      console.log(error);
+    }
+  }
+
   async getPosts() {
     try {
       return await this.firestore.collection("posts").valueChanges();

@@ -4,6 +4,8 @@ import { LoadingController, NavController, AlertController } from '@ionic/angula
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Post } from '../../models/post.model';
 import { ActivatedRoute } from '@angular/router';
+import { Comment } from '../../models/comment.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-edit-post',
@@ -13,6 +15,13 @@ import { ActivatedRoute } from '@angular/router';
 export class EditPostPage implements OnInit {
   post = {} as Post;
   id: any;
+
+  comment = {} as Comment;
+  comments: any;
+  likeOneTime = 0; //el boton like o dislike, solo se puede contar una vez
+  countLike: number;
+  countDislike: number;
+  driver: number;
 
   constructor(
     private appService: AppService,
@@ -27,6 +36,8 @@ export class EditPostPage implements OnInit {
 
   ngOnInit() {
     this.getPostById(this.id);
+    this.getCommentById();
+    this.driver = Math.floor(Math.random() * 999) + 50
   }
 
   async getPostById(id: string) {
@@ -43,6 +54,11 @@ export class EditPostPage implements OnInit {
         this.post.category = data["category"];
         this.post.date = data["date"];
         this.post.imgpath = data["imgpath"];
+        this.post.liked = data["liked"];
+        this.post.disliked = data["disliked"];
+        this.countLike = this.post.liked * 0.1;
+        this.countDislike = this.post.disliked * 0.1;
+        console.log(this.post);
       });
 
       //dismiss loading
@@ -50,6 +66,26 @@ export class EditPostPage implements OnInit {
 
     } catch (error) {
       this.appService.presentToast(error);
+    }
+  }
+
+  async getCommentById() {
+    try {
+      this.firestore.collection("comments", ref => ref.where("idPost","==",this.id).orderBy("timestamp", "desc")).snapshotChanges().subscribe(
+        data => {
+          this.comments = data.map(e => {
+            return {
+              id: e.payload.doc.id,
+              comment: e.payload.doc.data()["comment"],
+              date: e.payload.doc.data()["date"],
+              driver: e.payload.doc.data()["driver"],
+              idPost: e.payload.doc.data()["idPost"],
+            };
+          });
+        });
+    } catch (error) {
+      this.appService.presentToast(error);
+      console.log(error);
     }
   }
 
@@ -75,9 +111,83 @@ export class EditPostPage implements OnInit {
     }
   }
 
+  async CreateComment(comment: Comment) {
+    if (this.formValidation()) {
+      //show loading
+      let loading = await this.loadingCtrl.create({
+        message: "Por favor, espere.."
+      });
+
+      await loading.present();
+
+      try {
+        this.comment.date = moment().lang('es').format('dddd, D MMMM, h:mm a'); 
+        this.comment.timestamp = Date.now();
+        this.comment.driver = Math.floor(Math.random() * 999) + 50
+        this.comment.idPost = this.id;
+        await this.firestore.collection("comments").add(comment);
+      } catch (error) {
+        this.appService.presentToast(error);
+        console.log(error);
+      }
+      await loading.dismiss();
+      //Clear input
+      this.clearFieldComment()
+    }
+  }
+
+  async increaseProgressUp() {
+
+    if (this.likeOneTime == 0) {
+      this.likeOneTime = 1;
+      this.post.liked += 1;
+
+      try {
+        await this.firestore.doc("posts/" + this.id).update(this.post);
+      } catch (error) {
+        this.appService.presentToast(error);
+        console.log(error);
+      }
+
+    } else if (this.likeOneTime == 1) {
+      this.post.liked -= 1;
+      this.likeOneTime = 0;
+      try {
+        await this.firestore.doc("posts/" + this.id).update(this.post);
+      } catch (error) {
+        this.appService.presentToast(error);
+        console.log(error);
+      }
+    }
+  }
+
+  async increaseProgressDown() {
+
+    if (this.likeOneTime == 0) {
+      this.likeOneTime = 2;
+      this.post.disliked += 1;
+      try {
+        await this.firestore.doc("posts/" + this.id).update(this.post);
+      } catch (error) {
+        this.appService.presentToast(error);
+        console.log(error);
+      }
+
+    } else if (this.likeOneTime == 2) {
+      this.post.disliked -= 1;
+      this.likeOneTime = 0;
+      try {
+        await this.firestore.doc("posts/" + this.id).update(this.post);
+      } catch (error) {
+        this.appService.presentToast(error);
+        console.log(error);
+      }
+    }
+  }
+
   async presentAlertConfirm(id: string) {
     const alert = await this.alertCtrl.create({
-      header: 'Confirm!',
+      header: 'Atención',
       message: 'Desea eliminar este aviso?',
       buttons: [
         {
@@ -100,13 +210,44 @@ export class EditPostPage implements OnInit {
     await alert.present();
   }
 
+  async presentAlertConfirmDelete(id: string) {
+    const alert = await this.alertCtrl.create({
+      header: 'Atención',
+      message: 'Desea eliminar este comentario?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Eliminar',
+          handler: async () => {
+            console.log('Confirm Okay');
+            this.appService.deleteComment(id);
+            this.navCtrl.navigateRoot('edit-post');
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
   formValidation() {
     if (!this.post.detail) {
-      this.appService.presentToast("Ingrese una descripción");
+      this.appService.presentToast("Ingrese contenido al aviso");
       return false;
-    } else {
-      return true;
     }
+
+    if (!this.post.category) {
+      this.appService.presentToast("Seleccione una categoría");
+      return false;
+    }
+
+    return true;
+
   }
 
   categories = [
@@ -126,7 +267,7 @@ export class EditPostPage implements OnInit {
     {
       name: 'Municipal',
       imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Fpolicia_municipal250x200.png?alt=media&token=2430748c-6d77-4b04-82df-7d8fe3351904',
-      color: 'default',
+      color: 'primary',
       fill: 'outline'
     },
     {
@@ -138,13 +279,13 @@ export class EditPostPage implements OnInit {
     {
       name: 'Accidente',
       imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Faccidente250x200.png?alt=media&token=e5b7e7ca-d4a6-4dce-9eb3-6084f19a6506',
-      color: 'default',
+      color: 'secondary',
       fill: 'outline'
     },
     {
       name: 'Obras',
       imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Fobras250x200.png?alt=media&token=55d3b049-afba-4df9-b4b5-d65056a5c572',
-      color: 'success',
+      color: 'tertiary',
       fill: 'outline'
     }
   ];
@@ -174,6 +315,16 @@ export class EditPostPage implements OnInit {
         break;
     }
     this.post.imgpath = category.imgpath;
+  }
+
+  compareWithFn = (o1, o2) => {
+    return o1 && o2 ? o1.id === o2.id : o1 === o2;
+  };
+
+  compareWith = this.compareWithFn;
+
+  clearFieldComment(){
+    this.comment.comment = '';
   }
 
 }

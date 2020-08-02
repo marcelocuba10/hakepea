@@ -3,8 +3,8 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title style="font-size: small;">
-      HakePea, Dashboard Admin
+    <ion-title style="font-size: inherit;" class="ion-text-center">
+      Panel Moderador
     </ion-title>
     <ion-buttons slot="primary">
       <ion-button (click)="onLogout()">
@@ -15,6 +15,8 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <ion-searchbar mode='ios' debounce="1000" animated placeholder="Buscar avisos..." (ionChange)="search($event)">
+  </ion-searchbar>
   <div *ngIf="contentLoaded">
     <ion-list-header>Alertas en ruta:</ion-list-header>
     <ion-list *ngFor="let post of posts">
@@ -24,9 +26,28 @@
             <img src="{{post.imgpath}}">
           </ion-thumbnail>
           <ion-label>
-            <h3>{{post.detail}}</h3>
-            <p>{{post.category}}</p>
-            <p>{{post.date}}</p>
+            <ion-row>
+              <ion-col size="9.5">
+                <div class="ion-text-wrap">
+                  <h3 style="color: #3880ff; font-weight: 500;">{{post.category}}</h3>
+                  <p>{{post.detail}}</p>
+                  <p style="color: #187b26;font-weight: 500;"><sub>{{post.date}}</sub></p>
+                </div>
+              </ion-col>
+              <ion-col size="2.5">
+                <div style="margin-top: 45%;display: block;float: right;">
+                  <ion-row>
+                    <ion-label class="p-font p-color-up">{{post.liked}}</ion-label>
+                    <ion-icon name="thumbs-up" class="icon-spacing icon-color-up"></ion-icon>
+                  </ion-row>
+                  <ion-row>
+                    <ion-label class="p-font p-color-down">{{post.disliked}}</ion-label>
+                    <ion-icon name="thumbs-down" style="margin-top: 3px;" class="icon-spacing icon-color-down">
+                    </ion-icon>
+                  </ion-row>
+                </div>
+              </ion-col>
+            </ion-row>
           </ion-label>
         </ion-item>
 
@@ -69,5 +90,5 @@
       </ion-item>
     </ion-list>
   </div>
-  
+
 </ion-content>

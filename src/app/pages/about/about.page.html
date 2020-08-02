@@ -1,11 +1,16 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Informaciones</ion-title>
-  </ion-toolbar>
-</ion-header>
+  <ion-header translucent>
+    <ion-toolbar color="warning">
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/"></ion-back-button>
+      </ion-buttons>
+      <ion-title class="ion-text-center">Informaciones</ion-title>
+      <ion-buttons slot="primary">
+        <ion-button>
+          <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
 
 <ion-content>
   <ion-list *ngFor="let card of cards">

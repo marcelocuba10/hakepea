@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/services/app.service';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { LoadingController, NavController, AlertController } from '@ionic/angular';
+import { NavController, AlertController } from '@ionic/angular';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -17,11 +16,9 @@ export class AdminPage implements OnInit {
   constructor(
     private appService: AppService,
     private firestore: AngularFirestore,
-    private loadingCtrl: LoadingController,
     private navCtrl: NavController,
     private afAuth: AngularFireAuth,
     private alertCtrl: AlertController,
-    private actRoute: ActivatedRoute
   ) {
     setTimeout(() => {
       this.contentLoaded = true;
@@ -44,7 +41,9 @@ export class AdminPage implements OnInit {
               detail: e.payload.doc.data()["detail"],
               category: e.payload.doc.data()["category"],
               date: e.payload.doc.data()["date"],
-              imgpath: e.payload.doc.data()["imgpath"]
+              imgpath: e.payload.doc.data()["imgpath"],
+              liked: e.payload.doc.data()["liked"],
+              disliked: e.payload.doc.data()["disliked"]
             };
           });
         });
@@ -55,7 +54,7 @@ export class AdminPage implements OnInit {
 
   async presentAlertConfirmDelete(id: string) {
     const alert = await this.alertCtrl.create({
-      header: 'Confirm!',
+      header: 'Atención',
       message: 'Desea eliminar este aviso?',
       buttons: [
         {

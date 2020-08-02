@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { Post } from '../../models/post.model';
 import { AppService } from 'src/app/services/app.service';
-import { LoadingController, NavController } from '@ionic/angular';
+import { LoadingController, NavController, AlertController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
@@ -17,7 +17,8 @@ export class AddPostPage implements OnInit {
     private appService: AppService,
     private loadingCtrl: LoadingController,
     private navCtrl: NavController,
-    private firestore: AngularFirestore
+    private firestore: AngularFirestore,
+    private alertCtrl: AlertController
   ) { }
 
   ngOnInit() {
@@ -50,6 +51,31 @@ export class AddPostPage implements OnInit {
       this.navCtrl.navigateRoot("tabs");
       this.clearInputs();
     }
+  }
+
+  async presentAlertConfirm() {
+    const alert = await this.alertCtrl.create({
+      header: 'Atención',
+      message: 'Enviar falsos avisos puede ocasionar que seas bloqueado de la aplicación. Estás seguro de que el aviso es correcto?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Sí, enviar',
+          handler: () => {
+            console.log('Confirm Okay');
+            this.createPost(this.post);
+            this.navCtrl.navigateRoot('home');
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   clearInputs() {
