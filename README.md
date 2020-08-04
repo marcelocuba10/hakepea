@@ -45,3 +45,5 @@ Actualmente y según la regulación existente en Paraguay:
 *Según informa la sociedad automovilística del Paraguay, es completamente legal que los conductores 
 avisen de la ubicación de radares o controles a otros usuarios a través del móvil siempre y cuando esta información 
 se obtenga de la observación personal.
+
+agregando footer para testeo- borrar despues
