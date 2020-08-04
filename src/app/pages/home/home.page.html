@@ -1,5 +1,5 @@
 <ion-header [translucent]="true" no-border>
-  <ion-toolbar color="danger">
+  <ion-toolbar color="warning">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -18,7 +18,7 @@
   <ion-searchbar mode='ios' debounce="1000" animated placeholder="Buscar avisos..." (ionChange)="search($event)">
   </ion-searchbar>
   <div *ngIf="contentLoaded">
-    <ion-list-header>Avisos Recientes:</ion-list-header>
+    <ion-list-header>Avisos Más Recientes:</ion-list-header>
 
     <ion-list *ngFor="let post of posts">
       <ion-item class="no-padding" lines="full" button [routerLink]="['../../detail/',post.id]">
