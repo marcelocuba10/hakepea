@@ -26,7 +26,7 @@
         <ion-col size="9">
           <ion-card-header>
             <ion-card-subtitle>{{post.date}}</ion-card-subtitle>
-            <ion-card-title>{{post.detail}}</ion-card-title>
+            <ion-card-title class="ion-text-capitalize">{{post.detail}}</ion-card-title>
             <ion-card-subtitle style="color: #4c8dff;">{{post.category}}</ion-card-subtitle>
           </ion-card-header>
         </ion-col>
@@ -79,7 +79,7 @@
     <h2 style="margin-left: 12px;">Comentarios:</h2>
     <ion-row style="height: 80px;">
       <ion-col size="10">
-        <ion-textarea maxlength="500" minlength="20" clear-on-edit="true" autocapitalize [(ngModel)]="comment.comment"
+        <ion-textarea maxlength="500" minlength="20" clear-on-edit="true" class="ion-text-capitalize" [(ngModel)]="comment.comment"
           placeholder="Ingrese un comentario.."></ion-textarea>
       </ion-col>
       <ion-col size="2">
@@ -95,7 +95,7 @@
         </ion-avatar>
         <ion-label class="ion-text-capitalize; ion-text-wrap" color="dark">
           <p style="font-weight: 500;">Conductor {{comment.driver}}</p>
-          <p>{{comment.comment}}</p>
+          <p class="ion-text-capitalize">{{comment.comment}}</p>
           <p style="color: #4c8dff;"><sub>{{comment.date}}</sub></p>
         </ion-label>
       </ion-item>

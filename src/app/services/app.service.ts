@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ToastController, NavController, LoadingController } from '@ionic/angular';
+import { ToastController, NavController, LoadingController, AlertController } from '@ionic/angular';
 import { User } from '../models/user.model';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Post } from '../models/post.model';
@@ -17,8 +17,20 @@ export class AppService {
     private navCtrl: NavController,
     private afAuth: AngularFireAuth,
     private loadingCtrl: LoadingController,
-    private firestore: AngularFirestore
+    private firestore: AngularFirestore,
+    private alertCtrl: AlertController
   ) { }
+
+  async presentAlert(message: string) {
+    const alert = await this.alertCtrl.create({
+      cssClass: 'my-custom-class',
+      header: 'Atencion',
+      message: message,
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
 
   showToast(message: string) {
     this.toastCtrl.create({
@@ -35,70 +47,24 @@ export class AppService {
     toast.present();
   }
 
-  formValidationUser(user: User) {
-
-    if (!user.email) {
-      this.showToast("Enter email");
-      return false;
-    }
-
-    if (!user.password) {
-      this.showToast("Enter password");
-      return false;
-    }
-
-    return true;
-  }
-
-  formValidation(post: Post) {
-    if (!post.detail || post.detail == "") {
-      this.presentToast("Ingrese una descripción");
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   async getPostById(id: string) {
-    try {
-      return this.firestore.doc("posts/" + id);
-    } catch (error) {
-      this.presentToast(error);
-    }
+    return this.firestore.doc("posts/" + id);
   }
 
   async deletePost(id: string) {
-    try {
-      return await this.firestore.doc("posts/" + id).delete();
-    } catch (error) {
-      this.presentToast(error);
-      console.log(error);
-    }
+    return await this.firestore.doc("posts/" + id).delete();
   }
 
   async deleteComment(id: string) {
-    try {
-      return await this.firestore.doc("comments/" + id).delete();
-    } catch (error) {
-      this.presentToast(error);
-      console.log(error);
-    }
+    return await this.firestore.doc("comments/" + id).delete();
   }
 
   async getPosts() {
-    try {
-      return await this.firestore.collection("posts").valueChanges();
-    } catch (error) {
-      this.presentToast(error);
-    }
+    return await this.firestore.collection("posts").valueChanges();
   }
 
   async getCards() {
-    try {
-      return await this.firestore.collection("about").valueChanges();
-    } catch (error) {
-      this.presentToast(error);
-    }
+    return await this.firestore.collection("about").valueChanges();
   }
 
 

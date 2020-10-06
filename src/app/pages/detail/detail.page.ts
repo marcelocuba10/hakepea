@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { Post } from '../../models/post.model';
@@ -13,15 +14,18 @@ import * as moment from 'moment';
   styleUrls: ['./detail.page.scss'],
 })
 export class DetailPage implements OnInit {
-  post = {} as Post;
-  id: any;
 
-  comment = {} as Comment;
-  comments: any;
-  likeOneTime = 0; //el boton like o dislike, solo se puede contar una vez
-  countLike: number;
-  countDislike: number;
-  driver: number;
+  public post = {} as Post;
+  public id: any;
+  private loading: any;
+  public comment = {} as Comment;
+  public comments: any;
+  private likeOneTime = 0; //btn like o dislike, count one time forEach
+  private countLike: number;
+  private countDislike: number;
+  private driver: number;
+  private postSubscription: Subscription;
+  private commentSubscription: Subscription;
 
   constructor(
     private appService: AppService,
@@ -29,26 +33,26 @@ export class DetailPage implements OnInit {
     private actRoute: ActivatedRoute,
     private firestore: AngularFirestore
   ) {
-    this.id = this.actRoute.snapshot.paramMap.get("id"); //captura el ID
+    this.id = this.actRoute.snapshot.paramMap.get("id");
   }
 
   ngOnInit() {
+
     this.getPostById(this.id);
     this.getCommentById();
-    this.driver = Math.floor(Math.random() * 999) + 50
+    this.driver = Math.floor(Math.random() * 999) + 50; //get number random
+
   }
 
   async CreateComment(comment: Comment) {
-    if (this.formValidation()) {
-      //show loading
-      let loading = await this.loadingCtrl.create({
-        message: "Por favor, espere.."
-      });
 
-      await loading.present();
+    if (this.formValidation()) {
+
+      //show loading
+      await this.presentLoading();
 
       try {
-        this.comment.date = moment().lang('es').format('dddd, D MMMM, h:mm a'); 
+        this.comment.date = moment().locale('es').format('dddd, D MMMM, h:mm a');
         this.comment.timestamp = Date.now();
         this.comment.driver = Math.floor(Math.random() * 999) + 50
         this.comment.idPost = this.id;
@@ -57,19 +61,17 @@ export class DetailPage implements OnInit {
         this.appService.presentToast(error);
         console.log(error);
       }
-      await loading.dismiss();
-      //Clear input
+      this.loading.dismiss();
+      //clear input
       this.clearFieldComment()
     }
-  }
 
-  clearFieldComment(){
-    this.comment.comment = '';
   }
 
   async getCommentById() {
+
     try {
-      this.firestore.collection("comments", ref => ref.where("idPost","==",this.id).orderBy("timestamp", "desc")).snapshotChanges().subscribe(
+      this.commentSubscription = this.firestore.collection("comments", ref => ref.where("idPost", "==", this.id).orderBy("timestamp", "desc")).snapshotChanges().subscribe(
         data => {
           this.comments = data.map(e => {
             return {
@@ -83,21 +85,17 @@ export class DetailPage implements OnInit {
         });
     } catch (error) {
       this.appService.presentToast(error);
-      console.log(error);
     }
+
   }
 
   async getPostById(id: string) {
-    //show loading
-    let loading = await this.loadingCtrl.create({
-      message: "Please wait..."
-    });
 
-    await loading.present();
+    //show loading
+    await this.presentLoading();
 
     try {
-
-      (await this.appService.getPostById(this.id)).valueChanges().subscribe(
+      this.postSubscription = (await this.appService.getPostById(this.id)).valueChanges().subscribe(
         data => {
           this.post.detail = data["detail"];
           this.post.category = data["category"];
@@ -111,20 +109,13 @@ export class DetailPage implements OnInit {
         }
       );
 
-      //otro metodo sin service
-      // this.firestore.doc("posts/" + id).valueChanges().subscribe(data => {
-      //   this.post.detail = data["detail"];
-      //   this.post.category = data["category"];
-      //   this.post.date = data["date"];
-      //   this.post.imgpath = data["imgpath"];
-      // });
-
       // //dismiss loading
-      await loading.dismiss();
+      this.loading.dismiss();
 
     } catch (error) {
       this.appService.presentToast(error);
     }
+
   }
 
   async increaseProgressUp() {
@@ -137,7 +128,6 @@ export class DetailPage implements OnInit {
         await this.firestore.doc("posts/" + this.id).update(this.post);
       } catch (error) {
         this.appService.presentToast(error);
-        console.log(error);
       }
 
     } else if (this.likeOneTime == 1) {
@@ -150,6 +140,7 @@ export class DetailPage implements OnInit {
         console.log(error);
       }
     }
+
   }
 
   async increaseProgressDown() {
@@ -174,19 +165,24 @@ export class DetailPage implements OnInit {
         console.log(error);
       }
     }
+
   }
 
   formValidation() {
+
     if (!this.comment.comment) {
       this.appService.presentToast("Ingrese comentario");
       return false;
     }
     return true;
+
   }
 
   OnClick(category) {
+
     this.post.category = category.name;
     this.post.imgpath = category.imgpath;
+
   }
 
   categories = [
@@ -228,5 +224,20 @@ export class DetailPage implements OnInit {
       fill: 'outline'
     }
   ];
+
+  async presentLoading() {
+
+    this.loading = await this.loadingCtrl.create({
+      message: "Por favor, espere.."
+    });
+    return this.loading.present();
+
+  }
+
+  clearFieldComment() {
+
+    this.comment.comment = '';
+
+  }
 
 }

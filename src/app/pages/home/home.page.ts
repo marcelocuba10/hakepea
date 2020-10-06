@@ -8,6 +8,7 @@ import {
   PushNotificationToken,
   PushNotificationActionPerformed
 } from '@capacitor/core';
+import { Subscription } from 'rxjs';
 
 const { PushNotifications } = Plugins;
 
@@ -18,18 +19,14 @@ const { PushNotifications } = Plugins;
 })
 export class HomePage implements OnInit {
 
-  posts: any;
-  contentLoaded = false; //skeleton variable
-  postList: [];
+  public posts: any;
+  public postList: []; //search function
+  private postSubscription: Subscription;
 
   constructor(
     private appService: AppService,
     private firestore: AngularFirestore
-  ) {
-    setTimeout(() => {
-      this.contentLoaded = true;
-    }, 2000);
-  }
+  ) { }
 
   ngOnInit() {
     this.getPosts();
@@ -120,22 +117,9 @@ export class HomePage implements OnInit {
   // }
 
   async getPosts() {
-    //previamente se mostrara el skeleton
 
     try {
-
-      //this.firestore.collection('posts',ref=> ref.orderBy("date").limit(3));
-
-      // (await this.appService.getPosts()).subscribe(data => {
-      //   this.posts = data;
-      //   console.log(data);
-      // })
-
-      //dejo de funcionar y no me traia el id del item, no se porque?
-
-      //metodo antiguo sin service
-
-      this.firestore.collection("posts", ref => ref.orderBy("timestamp", "desc")).snapshotChanges().subscribe(
+      this.postSubscription = this.firestore.collection("posts", ref => ref.orderBy("timestamp", "desc")).snapshotChanges().subscribe(
         data => {
           this.posts = data.map(e => {
             return {
@@ -149,9 +133,15 @@ export class HomePage implements OnInit {
             };
           });
         });
-
     } catch (error) {
       this.appService.presentToast(error);
     }
+
   }
+
+  ngOnDestroy() {
+    this.postSubscription.unsubscribe();
+  }
+
+
 }

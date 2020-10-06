@@ -236,17 +236,13 @@ export class EditPostPage implements OnInit {
   }
 
   formValidation() {
-    if (!this.post.detail) {
-      this.appService.presentToast("Ingrese contenido al aviso");
+    
+    if (!this.post.detail || this.post.detail == "") {
+      this.appService.presentToast("Ingrese una descripción");
       return false;
+    } else {
+      return true;
     }
-
-    if (!this.post.category) {
-      this.appService.presentToast("Seleccione una categoría");
-      return false;
-    }
-
-    return true;
 
   }
 

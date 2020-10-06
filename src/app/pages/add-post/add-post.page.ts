@@ -86,6 +86,7 @@ export class AddPostPage implements OnInit {
   }
 
   formValidation() {
+    
     if (!this.post.detail) {
       this.appService.presentToast("Ingrese contenido al aviso");
       return false;

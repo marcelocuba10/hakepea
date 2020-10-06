@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-
 import { User } from '../../models/user.model';
 import { LoadingController, NavController } from '@ionic/angular';
 import { AppService } from 'src/app/services/app.service';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -12,7 +10,9 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  user = {} as User  //{} es un objeto vacio
+
+  public user = {} as User;
+  private loading: any;
 
   constructor(
     private loadingCtrl: LoadingController,
@@ -25,18 +25,15 @@ export class LoginPage implements OnInit {
   }
 
   async login(user: User) {
-    if (this.formValidationUser()) {
+
+    if (await this.formValidationUser()) {
 
       //show loading
-      let loading = await this.loadingCtrl.create({
-        message: 'Por favor, aguarde..'
-      });
-      await loading.present();
+      await this.presentLoading();
 
       try {
         await this.authservice.login(this.user);
         if (this.user) {
-          console.log('Logged in!');
           this.navCtrl.navigateRoot('admin');
         }
 
@@ -76,12 +73,34 @@ export class LoginPage implements OnInit {
         console.log(error);
       }
 
-      await loading.dismiss();
+      this.loading.dismiss();
     }
+    
   }
 
   async formValidationUser() {
-    await this.appService.formValidationUser(this.user)
+
+    if (!this.user.email) {
+      this.appService.presentAlert("Ingrese email");
+      return false;
+    }
+
+    if (!this.user.password) {
+      this.appService.presentAlert("Ingrese contraseña");
+      return false;
+    }
+
+    return true;
+
+  }
+
+  async presentLoading() {
+
+    this.loading = await this.loadingCtrl.create({
+      message: "Por favor, espere.."
+    });
+    return this.loading.present();
+
   }
 
 }
