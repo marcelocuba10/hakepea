@@ -17,6 +17,7 @@ const { PushNotifications } = Plugins;
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
+
 export class HomePage implements OnInit {
 
   public posts: any;
@@ -27,6 +28,10 @@ export class HomePage implements OnInit {
     private appService: AppService,
     private firestore: AngularFirestore
   ) { }
+
+  public getColor(category: string): string{
+    return category =="Policia Caminera" ? "green" : "red";
+ }
 
   ngOnInit() {
     this.getPosts();

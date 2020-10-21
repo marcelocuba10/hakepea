@@ -72,7 +72,19 @@ export class RegisterPage implements OnInit {
   }
 
   async formValidationUser() {
-    await this.appService.formValidationUser(this.user)
+
+    if (!this.user.email) {
+      this.appService.presentAlert("Ingrese email");
+      return false;
+    }
+
+    if (!this.user.password) {
+      this.appService.presentAlert("Ingrese contraseña");
+      return false;
+    }
+
+    return true;
+
   }
 
 }

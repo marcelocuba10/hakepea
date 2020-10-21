@@ -15,13 +15,13 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-searchbar mode='ios' debounce="1000" animated placeholder="Buscar avisos..." (ionChange)="search($event)">
+  <ion-searchbar disabled="true" mode='ios' debounce="1000" animated placeholder="Buscar avisos..." (ionChange)="search($event)">
   </ion-searchbar>
   <div *ngIf="posts">
     <ion-list-header>Avisos Más Recientes:</ion-list-header>
 
     <ion-list *ngFor="let post of posts">
-      <ion-item class="no-padding" lines="full" button [routerLink]="['../../detail/',post.id]">
+      <ion-item [ngStyle]="{'background': getColor(post.category)}" class="no-padding" lines="full" button [routerLink]="['../../detail/',post.id]">
         <ion-thumbnail slot="start">
           <img src="{{post.imgpath}}">
         </ion-thumbnail>

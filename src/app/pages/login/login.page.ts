@@ -41,8 +41,10 @@ export class LoginPage implements OnInit {
 
         let message: string;
         switch (error.code) {
+          
           case 'auth/email-already-in-use':
             message = 'Email ya en uso';
+            console.log('ingreso en el switch');
             break;
 
           case 'auth/invalid-email':
@@ -59,6 +61,7 @@ export class LoginPage implements OnInit {
 
           case 'auth/wrong-password':
             message = 'La contraseña es incorrecta';
+            console.log('ingreso en el switch');
             break;
 
           case 'auth/user-not-found':
@@ -70,7 +73,6 @@ export class LoginPage implements OnInit {
         }
 
         this.appService.presentToast(message);
-        console.log(error);
       }
 
       this.loading.dismiss();

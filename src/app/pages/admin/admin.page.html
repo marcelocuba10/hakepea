@@ -15,8 +15,18 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-searchbar mode='ios' debounce="1000" animated placeholder="Buscar avisos..." (ionChange)="search($event)">
+  <ion-searchbar disabled="true" mode='ios' debounce="1000" animated placeholder="Buscar avisos..." (ionChange)="search($event)">
   </ion-searchbar>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" style="background-color: #54a22b;text-align: center;padding: 6px 0px;" [routerLink]="['/register']">
+        <ion-icon style="font-size: x-large;color: white;" name="person-add-outline"></ion-icon>
+      </ion-col>
+      <ion-col size="6" style="background-color: #36abe0;text-align: center;padding: 6px 0px;">
+        <ion-icon style="font-size: x-large;color: white;" name="rocket-outline"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
   <div *ngIf="contentLoaded">
     <ion-list-header>Alertas en ruta:</ion-list-header>
     <ion-list *ngFor="let post of posts">
