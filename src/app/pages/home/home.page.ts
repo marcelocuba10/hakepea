@@ -29,9 +29,31 @@ export class HomePage implements OnInit {
     private firestore: AngularFirestore
   ) { }
 
-  public getColor(category: string): string{
-    return category =="Policia Caminera" ? "green" : "red";
- }
+  getColorBorder(category) {
+    switch (category) {
+      case 'Policía Caminera':
+        return '#009925 ridge';
+      case 'Policía Municipal':
+        return '#36abe0 ridge';
+      case 'Policía Nacional':
+        return '#3369E8 ridge';
+      case 'Accidente de Tránsito':
+        return '#D50F25 ridge';
+    }
+  }
+
+  getColorText(category) {
+    switch (category) {
+      case 'Policía Caminera':
+        return '#009925';
+      case 'Policía Municipal':
+        return '#36abe0';
+      case 'Policía Nacional':
+        return '#3369E8';
+      case 'Accidente de Tránsito':
+        return '#D50F25';
+    }
+  }
 
   ngOnInit() {
     this.getPosts();
