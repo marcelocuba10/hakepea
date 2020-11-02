@@ -98,6 +98,10 @@
       (click)="presentAlertConfirm(todoId)">Eliminar aviso</ion-button>
 
     <h2 style="margin-left: 12px;">Comentarios:</h2>
+    <ion-chip color="success">
+      <ion-icon name="information-circle-outline"></ion-icon>
+      <ion-label>Para eliminar un comentario, deslize hacia el lado derecho sobre el comentario</ion-label>
+    </ion-chip>
     <ion-row style="height: 80px;">
       <ion-col size="10">
         <ion-textarea maxlength="500" minlength="20" clear-on-edit="true" autocapitalize [(ngModel)]="comment.comment"
