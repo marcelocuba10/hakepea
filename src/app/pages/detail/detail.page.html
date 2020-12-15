@@ -35,6 +35,14 @@
       <ion-row>
         <ion-card-header class="ion-text-center" style="width: -webkit-fill-available; margin-top: -18px;">
           <ion-card-subtitle>La información es correcta? Favor, calificar el aviso</ion-card-subtitle>
+          <ion-chip color="success" (click)="increaseProgressUp()">
+            <ion-icon color="success" name="thumbs-up"></ion-icon>
+            <ion-label color="success">Confirmar</ion-label>
+          </ion-chip>
+          <ion-chip color="danger" (click)="increaseProgressDown()">
+            <ion-icon color="danger" name="thumbs-down"></ion-icon>
+            <ion-label color="danger">No está</ion-label>
+          </ion-chip>
           <ion-grid style="margin: 10px 0px;">
             <ion-row>
               <ion-col size="9">
@@ -65,13 +73,9 @@
               </ion-col>
             </ion-row>
           </ion-grid>
-          <ion-chip color="success" (click)="increaseProgressUp()">
-            <ion-icon color="success" name="thumbs-up"></ion-icon>
-            <ion-label color="success">Verdadero</ion-label>
-          </ion-chip>
-          <ion-chip color="danger" (click)="increaseProgressDown()">
-            <ion-icon color="danger" name="thumbs-down"></ion-icon>
-            <ion-label color="danger">Falso</ion-label>
+          <ion-chip color="primary" (click)="share()">
+            <ion-icon name="share-social-outline"></ion-icon>
+            <ion-label color="primary">Compartir</ion-label>
           </ion-chip>
         </ion-card-header>
       </ion-row>
@@ -79,7 +83,8 @@
     <h2 style="margin-left: 12px;">Comentarios:</h2>
     <ion-row style="height: 80px;">
       <ion-col size="10">
-        <ion-textarea maxlength="500" minlength="20" clear-on-edit="true" class="ion-text-capitalize" [(ngModel)]="comment.comment"
+        <ion-textarea style="background-color: #e2e2e2b8;border-radius: 15px;" maxlength="500" minlength="20"
+          clear-on-edit="true" class="ion-text-capitalize" [(ngModel)]="comment.comment"
           placeholder="Ingrese un comentario.."></ion-textarea>
       </ion-col>
       <ion-col size="2">
@@ -100,5 +105,11 @@
         </ion-label>
       </ion-item>
     </ion-list>
+    <!-- show map -->
+    <!-- <ion-row>
+      <ion-item>Latitude: {{ latitude }}</ion-item>
+      <ion-item>Longitude: {{ longitude }}</ion-item>
+      <div #map id="map"></div>
+    </ion-row> -->
   </ion-content>
 </ion-app>
