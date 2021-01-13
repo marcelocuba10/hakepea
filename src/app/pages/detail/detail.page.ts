@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterContentInit, ElementRef } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { Post } from '../../models/post.model';
 import { ActivatedRoute } from '@angular/router';
@@ -7,6 +7,12 @@ import { AppService } from '../../services/app.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Comment } from '../../models/comment.model';
 import * as moment from 'moment';
+import { Geolocation } from '@capacitor/core';
+
+// import { Geolocation } from '@ionic-native/geolocation/ngx';
+// import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
+
+declare var google;
 
 @Component({
   selector: 'app-detail',
@@ -27,11 +33,38 @@ export class DetailPage implements OnInit {
   private postSubscription: Subscription;
   private commentSubscription: Subscription;
 
+  //maps
+  latitude: number;
+  longitude: number;
+
+  @ViewChild('map', { static: true }) mapElement: ElementRef;
+  map: any;
+  address: string;
+
+  loadMap() {
+    // create a new map by passing HTMLElement
+    const mapEle: HTMLElement = document.getElementById('map');
+    // create LatLng object
+    const myLatLng = {lat: -25.4055935, lng: -54.644789100000004};
+    // create map
+    this.map = new google.maps.Map(mapEle, {
+      center: myLatLng,
+      zoom: 12
+    });
+  
+    google.maps.event.addListenerOnce(this.map, 'idle', () => {
+      //this.renderMarkers();
+      mapEle.classList.add('show-map');
+    });
+  }
+
   constructor(
     private appService: AppService,
     private loadingCtrl: LoadingController,
     private actRoute: ActivatedRoute,
-    private firestore: AngularFirestore
+    private firestore: AngularFirestore,
+    //private geolocation: Geolocation,
+    //private nativeGeocoder: NativeGeocoder
   ) {
     this.id = this.actRoute.snapshot.paramMap.get("id");
   }
@@ -41,8 +74,16 @@ export class DetailPage implements OnInit {
     this.getPostById(this.id);
     this.getCommentById();
     this.driver = Math.floor(Math.random() * 999) + 50; //get number random
-
+    this.loadMap();
+    this.getLocation();
   }
+
+  async getLocation() {
+    const position = await Geolocation.getCurrentPosition();
+    this.latitude = position.coords.latitude;
+    this.longitude = position.coords.longitude;
+  }
+
 
   async CreateComment(comment: Comment) {
 
@@ -66,6 +107,10 @@ export class DetailPage implements OnInit {
       this.clearFieldComment()
     }
 
+  }
+
+  share(){
+    this.appService.presentAlert("funcion no habilitada");
   }
 
   async getCommentById() {

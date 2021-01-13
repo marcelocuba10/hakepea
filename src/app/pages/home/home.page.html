@@ -18,10 +18,10 @@
   <ion-searchbar disabled="true" mode='ios' debounce="1000" animated placeholder="Buscar avisos..." (ionChange)="search($event)">
   </ion-searchbar>
   <div *ngIf="posts">
-    <ion-list-header>Avisos Más Recientes:</ion-list-header>
+    <ion-list-header>Alertas en tu zona:</ion-list-header>
 
     <ion-list *ngFor="let post of posts">
-      <ion-item [ngStyle]="{'background': getColor(post.category)}" class="no-padding" lines="full" button [routerLink]="['../../detail/',post.id]">
+      <ion-item [style.border-bottom]="getColorBorder(post.category)" class="no-padding" lines="full" button [routerLink]="['../../detail/',post.id]">
         <ion-thumbnail slot="start">
           <img src="{{post.imgpath}}">
         </ion-thumbnail>
@@ -29,14 +29,15 @@
           <ion-row>
             <ion-col size="9.5">
               <div class="ion-text-wrap">
-                <h3 style="color: #3880ff; font-weight: 500;">{{post.category}}</h3>
-                <p>{{post.detail}}</p>
-                <p style="color: #187b26;font-weight: 500;"><sub>{{post.date}}</sub></p>
+                <h3 [style.color]="getColorText(post.category)" style="font-weight: 500;">{{post.category}}</h3>
+                <p class="ion-text-capitalize">{{post.detail}}</p>
+                <p [style.color]="getColorText(post.category)" style="font-weight: 500;"><sub>{{post.date}}</sub></p>
               </div>
             </ion-col>
             <ion-col size="2.5">
-              <div style="margin-top: 45%;display: block;float: right;">
-                <ion-row>
+              <div style="margin-top: 5%;display: block;float: right;background-color: #81c6e6;padding: 5px;border-radius: 5px;">
+                <p>Verificado</p>
+                <ion-row style="float: right;">
                   <ion-label class="p-font p-color-up">{{post.liked}}</ion-label><ion-icon name="thumbs-up" class="icon-spacing icon-color-up"></ion-icon>
                 </ion-row>
                 <ion-row>
