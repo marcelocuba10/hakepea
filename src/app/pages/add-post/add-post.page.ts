@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { Post } from '../../models/post.model';
 import { AppService } from 'src/app/services/app.service';
-import { LoadingController, NavController, AlertController } from '@ionic/angular';
+import { NavController, AlertController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
@@ -15,7 +15,6 @@ export class AddPostPage implements OnInit {
 
   constructor(
     private appService: AppService,
-    private loadingCtrl: LoadingController,
     private navCtrl: NavController,
     private firestore: AngularFirestore,
     private alertCtrl: AlertController
@@ -25,57 +24,54 @@ export class AddPostPage implements OnInit {
   }
 
   async createPost(post: Post) {
-    if (this.formValidation()) {
-      //show loading
-      let loading = await this.loadingCtrl.create({
-        message: "Por favor, espere.."
-      });
+    this.appService.presentLoading(1);
+    try {
+      this.post.date = moment().locale('es').format('dddd, D MMMM, h:mm a');
+      this.post.timestamp = Date.now();
+      this.post.liked = 1;
+      this.post.disliked = 0;
 
-      await loading.present();
+      await this.firestore.collection("posts").add(post);
+      this.appService.presentLoading(0);
 
-      try {
-        this.post.date = moment().lang('es').format('dddd, D MMMM, h:mm a'); 
-        this.post.timestamp = Date.now();
-        this.post.liked = 1;
-        this.post.disliked = 0;
-
-        await this.firestore.collection("posts").add(post);
-
-      } catch (error) {
-        this.appService.presentToast(error);
-      }
-
-      await loading.dismiss();
-
-      //redirect to home
-      this.navCtrl.navigateRoot("tabs");
-      this.clearInputs();
+    } catch (error) {
+      this.appService.presentToast(error);
+      this.appService.presentLoading(0);
+      console.log(error);
     }
+
+    this.appService.presentLoading(0);
+
+    //redirect to home
+    this.navCtrl.navigateRoot("home");
+    this.clearInputs();
+
   }
 
-  async presentAlertConfirm() {
-    const alert = await this.alertCtrl.create({
-      header: 'Atención',
-      message: 'Enviar falsos avisos puede ocasionar que seas bloqueado de la aplicación. Estás seguro de que el aviso es correcto?',
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
+  async presentAlertConfirm(post: Post) {
+    if (await this.appService.formValidation(post, "post")) {
+      const alert = await this.alertCtrl.create({
+        header: 'Atención',
+        message: 'Enviar falsos avisos puede ocasionar que seas bloqueado de la aplicación. Estás seguro de que el aviso es correcto?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: (blah) => {
+              console.log('Confirm Cancel: blah');
+            }
+          }, {
+            text: 'Sí, enviar',
+            handler: () => {
+              console.log('Confirm Okay');
+              this.createPost(this.post);
+            }
           }
-        }, {
-          text: 'Sí, enviar',
-          handler: () => {
-            console.log('Confirm Okay');
-            this.createPost(this.post);
-            this.navCtrl.navigateRoot('home');
-          }
-        }
-      ]
-    });
-    await alert.present();
+        ]
+      });
+      await alert.present();
+    }
   }
 
   clearInputs() {
@@ -85,39 +81,24 @@ export class AddPostPage implements OnInit {
     this.post.imgpath = '';
   }
 
-  formValidation() {
-    
-    if (!this.post.detail) {
-      this.appService.presentToast("Ingrese contenido al aviso");
-      return false;
-    }
-
-    if (!this.post.category) {
-      this.appService.presentToast("Seleccione una categoría");
-      return false;
-    }
-
-    return true;
-
-  }
 
   categories = [
     {
       name: 'Caminera',
-      imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Fpolicia_caminera250x200.png?alt=media&token=9d0f5e6b-4192-46f4-a01a-5ddfd42b55f7',
+      imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Ficon-police-hakepea2.jpg?alt=media&token=3c499b17-e165-48c2-a4a5-137d49738dab',
       color: 'success',
       fill: 'outline',
       selected: 'solid'
     },
     {
       name: 'Nacional',
-      imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Fpolicia_nacional250x200.png?alt=media&token=64ff8de0-b0aa-4e13-bdb9-596165df0b0e',
+      imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Ficon-police-hakepea2.jpg?alt=media&token=3c499b17-e165-48c2-a4a5-137d49738dab',
       color: 'warning',
       fill: 'outline'
     },
     {
       name: 'Municipal',
-      imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Fpolicia_municipal250x200.png?alt=media&token=2430748c-6d77-4b04-82df-7d8fe3351904',
+      imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Ficon-police-hakepea2.jpg?alt=media&token=3c499b17-e165-48c2-a4a5-137d49738dab',
       color: 'default',
       fill: 'outline'
     },
@@ -129,7 +110,7 @@ export class AddPostPage implements OnInit {
     },
     {
       name: 'Accidente',
-      imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Faccidente250x200.png?alt=media&token=e5b7e7ca-d4a6-4dce-9eb3-6084f19a6506',
+      imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Fpngtree-prohibit-warning-icon-image_129740.jpg?alt=media&token=5669f436-7eb8-436a-a64d-d3e1a2ae8c18',
       color: 'default',
       fill: 'outline'
     },

@@ -24,3 +24,15 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+
+/* tab style font */
+.button-inner {
+    font-size: 18px;
+}
+
+/* calification style home */
+.sc-ion-label-md-s p {
+    margin-right: -3px;
+    padding-right: 2px;
+}
