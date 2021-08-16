@@ -45,7 +45,11 @@ const routes: Routes = [
   {
     path: 'disclaimer',
     loadChildren: () => import('./pages/disclaimer/disclaimer.module').then( m => m.DisclaimerPageModule)
+  },  {
+    path: 'location',
+    loadChildren: () => import('./pages/location/location.module').then( m => m.LocationPageModule)
   },
+
 ];
 @NgModule({
   imports: [

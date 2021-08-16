@@ -2,8 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { Post } from '../../models/post.model';
 import { AppService } from 'src/app/services/app.service';
-import { NavController, AlertController } from '@ionic/angular';
+import { NavController, AlertController, LoadingController, Platform } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import {
+  GoogleMaps,
+  GoogleMap,
+  GoogleMapsEvent,
+  ILatLng,
+  Marker,
+  BaseArrayClass
+} from '@ionic-native/google-maps';
+
+declare const google;
 
 @Component({
   selector: 'app-add-post',
@@ -12,15 +23,61 @@ import { AngularFirestore } from '@angular/fire/firestore';
 })
 export class AddPostPage implements OnInit {
   post = {} as Post;
+  mapRef: any;
+  map: GoogleMap;
 
   constructor(
     private appService: AppService,
     private navCtrl: NavController,
     private firestore: AngularFirestore,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private geolocation: Geolocation,
+    private loadingCtrl: LoadingController,
+    private platform: Platform
   ) { }
 
   ngOnInit() {
+    this.loadmap();
+  }
+
+  async loadmap() {
+    //show loading
+     const loading = await this.loadingCtrl.create();
+     loading.present();
+
+    const myLatLng = await this.getLocation();
+    console.log(myLatLng);
+    const mapEle: HTMLElement = document.getElementById('map');
+
+    // //crear mapa
+    this.mapRef = new google.maps.Map(mapEle, {
+      center: { lat: myLatLng.lat, lng: myLatLng.lng },
+      zoom: 18,
+      mapTypeId: 'roadmap'
+    });
+
+    google.maps.event.addListenerOnce(this.mapRef, 'idle', () => {
+      loading.dismiss();
+      this.addMarker(myLatLng.lat, myLatLng.lng);
+    });
+  }
+
+  private async getLocation() {
+    const rta = await this.geolocation.getCurrentPosition();
+    return {
+      lat: rta.coords.latitude,
+      lng: rta.coords.longitude
+    };
+  }
+
+  private addMarker(lat: number, lng: number) {
+    const marker = new google.maps.Marker({
+      position: {
+        lat, lng
+      },
+      map: this.mapRef,
+      title: 'hello world!'
+    });
   }
 
   async createPost(post: Post) {
@@ -84,23 +141,11 @@ export class AddPostPage implements OnInit {
 
   categories = [
     {
-      name: 'Caminera',
-      imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Ficon-police-hakepea2.jpg?alt=media&token=3c499b17-e165-48c2-a4a5-137d49738dab',
+      name: 'Policia',
+      imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Fpolice-icon-80x80%20(1).png?alt=media&token=80caac4b-25f2-491d-9c59-8ee60a15dd41',
       color: 'success',
       fill: 'outline',
       selected: 'solid'
-    },
-    {
-      name: 'Nacional',
-      imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Ficon-police-hakepea2.jpg?alt=media&token=3c499b17-e165-48c2-a4a5-137d49738dab',
-      color: 'warning',
-      fill: 'outline'
-    },
-    {
-      name: 'Municipal',
-      imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Ficon-police-hakepea2.jpg?alt=media&token=3c499b17-e165-48c2-a4a5-137d49738dab',
-      color: 'default',
-      fill: 'outline'
     },
     {
       name: 'Trafico',
@@ -110,14 +155,8 @@ export class AddPostPage implements OnInit {
     },
     {
       name: 'Accidente',
-      imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Fpngtree-prohibit-warning-icon-image_129740.jpg?alt=media&token=5669f436-7eb8-436a-a64d-d3e1a2ae8c18',
+      imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Fcrash-car-icon-80x80%20(1).png?alt=media&token=ef948cd5-07e0-43a5-892e-c3042b4f0a3b',
       color: 'default',
-      fill: 'outline'
-    },
-    {
-      name: 'Obras',
-      imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Fobras250x200.png?alt=media&token=55d3b049-afba-4df9-b4b5-d65056a5c572',
-      color: 'success',
       fill: 'outline'
     }
   ];

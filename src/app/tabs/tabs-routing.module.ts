@@ -48,6 +48,10 @@ const routes: Routes = [
         loadChildren: () => import('../pages/disclaimer/disclaimer.module').then(m => m.DisclaimerPageModule)
       },
       {
+        path: 'location',
+        loadChildren: () => import('../pages/location/location.module').then(m => m.LocationPageModule)
+      },
+      {
         path: '',
         redirectTo: '/tabs/home',
         pathMatch: 'full'
@@ -89,6 +93,11 @@ const routes: Routes = [
     redirectTo: '/tabs/edit-post/:id',
     pathMatch: 'full',
     canActivate:[AuthGuard]
+  },
+  {
+    path: 'location',
+    redirectTo: '/tabs/location',
+    pathMatch: 'full'
   }
 ];
 
