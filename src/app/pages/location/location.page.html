@@ -1,11 +1,16 @@
-<ion-header>
-  <ion-toolbar>
+<ion-header [translucent]="true" no-border>
+  <ion-toolbar color="warning">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>
-      marker
+    <ion-title style="font-size: small" class="ion-text-center">
+      Mapa general de avisos
     </ion-title>
+    <ion-buttons slot="primary">
+      <ion-button>
+        <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

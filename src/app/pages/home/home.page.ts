@@ -31,75 +31,65 @@ export class HomePage implements OnInit {
 
   getColorBorder(category) {
     switch (category) {
-      case 'Policía Caminera':
-        return '#009925 ridge';
-      case 'Policía Municipal':
-        return '#36abe0 ridge';
-      case 'Policía Nacional':
-        return '#3369E8 ridge';
+      case 'Trafico':
+        return '#2dd36f ridge';
+      case 'Control Policial':
+        return '#129cff ridge';
       case 'Accidente de Tránsito':
-        return '#D50F25 ridge';
+        return '#ffc409 ridge';
     }
   }
 
   getColorText(category) {
     switch (category) {
-      case 'Policía Caminera':
-        return '#009925';
-      case 'Policía Municipal':
-        return '#36abe0';
-      case 'Policía Nacional':
-        return '#3369E8';
+      case 'Trafico':
+        return '#2dd36f ridge';
+      case 'Control Policial':
+        return '#129cff ridge';
       case 'Accidente de Tránsito':
-        return '#D50F25';
+        return '#ffc409 ridge';
     }
   }
 
   ngOnInit() {
     this.getPosts();
-
-    //this.postList = this.initializePosts();
     console.log('Initializing HomePage');
 
     // Request permission to use push notifications
     // iOS will prompt user and return if they granted permission or not
     // Android will just grant without prompting
-    PushNotifications.requestPermission().then(result => {
-      if (result.granted) {
-        // Register with Apple / Google to receive push via APNS/FCM
-        PushNotifications.register();
-      } else {
-        // Show some error
-      }
-    });
 
-    PushNotifications.addListener('registration',
-      (token: PushNotificationToken) => {
-        //alert('Push registration success, token: ' + token.value);
-        console.log("Push registration success");
-      }
-    );
+    // PushNotifications.requestPermission().then(result => {
+    //   if (result.granted) {
+    //     PushNotifications.register();
+    //   } else {
+    //     // Show some error
+    //   }
+    // });
 
-    PushNotifications.addListener('registrationError',
-      (error: any) => {
-        //alert('Error on registration: ' + JSON.stringify(error));
-        console.log("Error on registration");
-      }
-    );
+    // PushNotifications.addListener('registration',
+    //   (token: PushNotificationToken) => {
+    //     console.log("Push registration success");
+    //   }
+    // );
 
-    PushNotifications.addListener('pushNotificationReceived',
-      (notification: PushNotification) => {
-        //alert('Push received: ' + JSON.stringify(notification));
-        console.log("Push received");
-      }
-    );
+    // PushNotifications.addListener('registrationError',
+    //   (error: any) => {
+    //     console.log("Error on registration");
+    //   }
+    // );
 
-    PushNotifications.addListener('pushNotificationActionPerformed',
-      (notification: PushNotificationActionPerformed) => {
-        //alert('Push action performed: ' + JSON.stringify(notification));
-        console.log("Push action performed");
-      }
-    );
+    // PushNotifications.addListener('pushNotificationReceived',
+    //   (notification: PushNotification) => {
+    //     console.log("Push received");
+    //   }
+    // );
+
+    // PushNotifications.addListener('pushNotificationActionPerformed',
+    //   (notification: PushNotificationActionPerformed) => {
+    //     console.log("Push action performed");
+    //   }
+    // );
   }
 
   // search(evt) {

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ToastController, NavController, LoadingController, AlertController } from '@ionic/angular';
-import { User } from '../models/user.model';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Post } from '../models/post.model';
 import { AngularFirestore } from '@angular/fire/firestore';

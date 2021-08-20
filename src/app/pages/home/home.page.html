@@ -15,9 +15,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-searchbar disabled="true" mode="ios" debounce="1000" animated placeholder="Buscar avisos..."
-    (ionChange)="search($event)">
-  </ion-searchbar>
+  <ion-searchbar disabled="true" mode="ios" debounce="1000" animated placeholder="Buscar avisos..." (ionChange)="search($event)"> </ion-searchbar>
   <div *ngIf="posts">
     <ion-list-header>Alertas en tu zona:</ion-list-header>
 

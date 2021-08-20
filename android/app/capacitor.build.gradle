@@ -12,7 +12,9 @@ dependencies {
 
 
 }
-
+apply from: "../../node_modules/cordova-androidx-build/src/android/cordova-androidx-build.gradle"
+apply from: "../../node_modules/cordova-plugin-googlemaps/src/android/frameworks/tbxml-android.gradle"
+apply from: "../../node_modules/cordova-plugin-googlemaps/src/android/frameworks/pgm-custom.gradle"
 
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()

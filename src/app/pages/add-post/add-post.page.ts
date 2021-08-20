@@ -1,30 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import * as moment from 'moment';
 import { Post } from '../../models/post.model';
 import { AppService } from 'src/app/services/app.service';
-import { NavController, AlertController, LoadingController, Platform } from '@ionic/angular';
+import { NavController, AlertController, LoadingController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import {
-  GoogleMaps,
-  GoogleMap,
-  GoogleMapsEvent,
-  ILatLng,
-  Marker,
-  BaseArrayClass
-} from '@ionic-native/google-maps';
 
 declare const google;
-
 @Component({
   selector: 'app-add-post',
   templateUrl: './add-post.page.html',
   styleUrls: ['./add-post.page.scss'],
 })
-export class AddPostPage implements OnInit {
+export class AddPostPage implements OnInit  {
   post = {} as Post;
   mapRef: any;
-  map: GoogleMap;
+  public myLatLng:any;
 
   constructor(
     private appService: AppService,
@@ -33,7 +24,6 @@ export class AddPostPage implements OnInit {
     private alertCtrl: AlertController,
     private geolocation: Geolocation,
     private loadingCtrl: LoadingController,
-    private platform: Platform
   ) { }
 
   ngOnInit() {
@@ -42,23 +32,33 @@ export class AddPostPage implements OnInit {
 
   async loadmap() {
     //show loading
-     const loading = await this.loadingCtrl.create();
-     loading.present();
+    const loading = await this.loadingCtrl.create();
+    loading.present();
 
-    const myLatLng = await this.getLocation();
-    console.log(myLatLng);
+    if (!this.myLatLng) {
+      //run first time getlocation
+      this.myLatLng = await this.getLocation();
+    }
+
+    console.log(this.myLatLng);
+
+    //save lat and lng in model post
+    this.post.lat = this.myLatLng.lat;
+    this.post.lng = this.myLatLng.lng;
+    
+    //show location in map
     const mapEle: HTMLElement = document.getElementById('map');
 
     // //crear mapa
     this.mapRef = new google.maps.Map(mapEle, {
-      center: { lat: myLatLng.lat, lng: myLatLng.lng },
+      center: { lat: this.myLatLng.lat, lng: this.myLatLng.lng },
       zoom: 18,
       mapTypeId: 'roadmap'
     });
 
     google.maps.event.addListenerOnce(this.mapRef, 'idle', () => {
       loading.dismiss();
-      this.addMarker(myLatLng.lat, myLatLng.lng);
+      this.addMarker(this.myLatLng.lat, this.myLatLng.lng);
     });
   }
 
@@ -76,7 +76,8 @@ export class AddPostPage implements OnInit {
         lat, lng
       },
       map: this.mapRef,
-      title: 'hello world!'
+      title: 'hello world!',
+      snippet: 'This plugin is awesome!',
     });
   }
 
@@ -88,6 +89,10 @@ export class AddPostPage implements OnInit {
       this.post.liked = 1;
       this.post.disliked = 0;
 
+      console.log(this.post.lat);
+      console.log(this.post.lng);
+
+      //save post in firestore
       await this.firestore.collection("posts").add(post);
       this.appService.presentLoading(0);
 
@@ -164,23 +169,14 @@ export class AddPostPage implements OnInit {
   OnClick(category) {
     //pasamos la categoria selecionada al objeto post.categoria
     switch (category.name) {
-      case category.name = "Caminera":
-        this.post.category = "Policía Caminera";
-        break;
-      case category.name = "Nacional":
-        this.post.category = "Policía Nacional"
-        break;
-      case category.name = "Municipal":
-        this.post.category = "Policía Municipal"
+      case category.name = "Policia":
+        this.post.category = "Control Policial";
         break;
       case category.name = "Trafico":
-        this.post.category = category.name;
+        this.post.category = "Trafico";
         break;
       case category.name = "Accidente":
         this.post.category = "Accidente de Tránsito";
-        break;
-      case category.name = "Obras":
-        this.post.category = "Obras de Construcción";
         break;
       default:
         break;

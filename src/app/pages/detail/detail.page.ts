@@ -1,19 +1,15 @@
 import { Subscription } from 'rxjs';
-import { Component, OnInit, ViewChild, AfterContentInit, ElementRef } from '@angular/core';
-import { LoadingController, NavController } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
+import { LoadingController, NavController, Platform } from '@ionic/angular';
 import { Post } from '../../models/post.model';
-import { ActivatedRoute, Routes } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AppService } from '../../services/app.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Comment } from '../../models/comment.model';
 import * as moment from 'moment';
-import { Geolocation } from '@capacitor/core';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
-// import { Geolocation } from '@ionic-native/geolocation/ngx';
-// import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
-
-declare var google;
-
+declare const google;
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.page.html',
@@ -32,65 +28,107 @@ export class DetailPage implements OnInit {
   private driver: number;
   private postSubscription: Subscription;
   private commentSubscription: Subscription;
-
-
-
-  //maps
-  latitude: number;
-  longitude: number;
-
-  // @ViewChild('map', { static: true }) mapElement: ElementRef;
-  // map: any;
-  // address: string;
-
-  // loadMap() {
-  //   // create a new map by passing HTMLElement
-  //   const mapEle: HTMLElement = document.getElementById('map');
-  //   // create LatLng object
-  //   const myLatLng = {lat: -25.4055935, lng: -54.644789100000004};
-  //   // create map
-  //   this.map = new google.maps.Map(mapEle, {
-  //     center: myLatLng,
-  //     zoom: 12
-  //   });
-  
-  //   google.maps.event.addListenerOnce(this.map, 'idle', () => {
-  //     //this.renderMarkers();
-  //     mapEle.classList.add('show-map');
-  //   });
-  // }
+  private mapRef: any;
+  public lat: any;
+  public lng: any;
 
   constructor(
     private appService: AppService,
     private loadingCtrl: LoadingController,
     private actRoute: ActivatedRoute,
     private firestore: AngularFirestore,
-    public navCtrl:NavController,
-    //private geolocation: Geolocation,
-    //private nativeGeocoder: NativeGeocoder
+    public navCtrl: NavController,
+    private geolocation: Geolocation,
+    private platform: Platform
   ) {
     this.id = this.actRoute.snapshot.paramMap.get("id");
   }
 
   ngOnInit() {
-
     this.getPostById(this.id);
     this.getCommentById();
     this.driver = Math.floor(Math.random() * 999) + 50; //get number random
-    // this.loadMap();
-    this.getLocation();
+    this.platform.ready();
   }
 
-  goBack() {
-    this.navCtrl.navigateRoot('home');
+  async getPostById(id: string) {
+    //show loading
+    await this.presentLoading();
+
+    try {
+      this.postSubscription = (await this.appService.getPostById(this.id)).valueChanges().subscribe(
+        data => {
+          this.post.detail = data["detail"];
+          this.post.category = data["category"];
+          this.post.date = data["date"];
+          this.post.imgpath = data["imgpath"];
+          this.post.liked = data["liked"];
+          this.post.disliked = data["disliked"];
+          this.countLike = this.post.liked * 0.1;
+          this.countDislike = this.post.disliked * 0.1;
+          this.lat = data["lat"];
+          this.lng = data["lng"];
+          console.log(this.post);
+          console.log(this.lat);
+          console.log(this.lng);
+        }
+      );
+            // //dismiss loading
+            this.loading.dismiss();
+    } catch (error) {
+      this.appService.presentToast(error);
+    }
+
+    if (!this.lat && !this.lng) {
+      console.log("lat y lng vacios aun");
+      console.log(this.lat);
+      console.log(this.lng);
+      this.getPostById(id);
+    } else {
+      console.log("lat y lng no vacios");
+      this.loadmap();
+    }
   }
 
-  async getLocation() {
-    const position = await Geolocation.getCurrentPosition();
-    this.latitude = position.coords.latitude;
-    this.longitude = position.coords.longitude;
+  async loadmap() {
+    //show loading
+    const loading = await this.loadingCtrl.create();
+    loading.present();
+
+    //show location in map
+    const mapEle: HTMLElement = document.getElementById('map');
+
+    // //crear mapa
+    this.mapRef = new google.maps.Map(mapEle, {
+      center: { lat: this.lat, lng: this.lng },
+      zoom: 18,
+      mapTypeId: 'roadmap'
+    });
+
+    google.maps.event.addListenerOnce(this.mapRef, 'idle', () => {
+      loading.dismiss();
+      this.addMarker(this.lat, this.lng);
+    });
   }
 
+  private async getLocation() {
+    const rta = await this.geolocation.getCurrentPosition();
+    return {
+      lat: rta.coords.latitude,
+      lng: rta.coords.longitude
+    };
+  }
+
+  private addMarker(lat: number, lng: number) {
+    const marker = new google.maps.Marker({
+      position: {
+        lat: this.lat, lng: this.lng
+      },
+      map: this.mapRef,
+      title: 'hello world!',
+      snippet: 'This plugin is awesome!',
+    });
+  }
 
   async CreateComment(comment: Comment) {
 
@@ -113,10 +151,9 @@ export class DetailPage implements OnInit {
       //clear input
       this.clearFieldComment()
     }
-
   }
 
-  share(){
+  share() {
     this.appService.presentAlert("funcion no habilitada");
   }
 
@@ -138,36 +175,6 @@ export class DetailPage implements OnInit {
     } catch (error) {
       this.appService.presentToast(error);
     }
-
-  }
-
-  async getPostById(id: string) {
-
-    //show loading
-    await this.presentLoading();
-
-    try {
-      this.postSubscription = (await this.appService.getPostById(this.id)).valueChanges().subscribe(
-        data => {
-          this.post.detail = data["detail"];
-          this.post.category = data["category"];
-          this.post.date = data["date"];
-          this.post.imgpath = data["imgpath"];
-          this.post.liked = data["liked"];
-          this.post.disliked = data["disliked"];
-          this.countLike = this.post.liked * 0.1;
-          this.countDislike = this.post.disliked * 0.1;
-          console.log(this.post);
-        }
-      );
-
-      // //dismiss loading
-      this.loading.dismiss();
-
-    } catch (error) {
-      this.appService.presentToast(error);
-    }
-
   }
 
   async increaseProgressUp() {
@@ -192,7 +199,6 @@ export class DetailPage implements OnInit {
         console.log(error);
       }
     }
-
   }
 
   async increaseProgressDown() {
@@ -217,7 +223,6 @@ export class DetailPage implements OnInit {
         console.log(error);
       }
     }
-
   }
 
   formValidation() {
@@ -235,6 +240,10 @@ export class DetailPage implements OnInit {
     this.post.category = category.name;
     this.post.imgpath = category.imgpath;
 
+  }
+
+  goBack() {
+    this.navCtrl.navigateRoot('home');
   }
 
   categories = [

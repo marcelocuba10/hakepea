@@ -6,4 +6,6 @@ export interface Post{
     timestamp?:number;
     liked?:number;
     disliked?:number;
+    lat?:number;
+    lng?:number;
 }
