@@ -3,6 +3,7 @@ export interface Post{
     category?:string;
     date?: string;
     imgpath?: string;
+    imgpathMarker?: string;
     timestamp?:number;
     liked?:number;
     disliked?:number;

@@ -8,6 +8,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Comment } from '../../models/comment.model';
 import * as moment from 'moment';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { GoogleMaps } from '@ionic-native/google-maps';
 
 declare const google;
 @Component({
@@ -31,6 +32,7 @@ export class DetailPage implements OnInit {
   private mapRef: any;
   public lat: any;
   public lng: any;
+  map: GoogleMaps;
 
   constructor(
     private appService: AppService,
@@ -45,11 +47,28 @@ export class DetailPage implements OnInit {
   }
 
   ngOnInit() {
+    console.log("se ejecuta cuando termina de cargar toda la pagina");
     this.getPostById(this.id);
     this.getCommentById();
     this.driver = Math.floor(Math.random() * 999) + 50; //get number random
     this.platform.ready();
   }
+
+  //ejecuta cada vez que la visite la pagina
+  ionViewWillEnter() {
+    console.log("ejecuta cada vez que la visite la pagina, antes que cargue");
+    this.loadmap();
+    this.initMap();
+  }
+
+ 
+
+ initMap(): void {
+  this.map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
+    center: { lat: -34.397, lng: 150.644 },
+    zoom: 8,
+  });
+}
 
   async getPostById(id: string) {
     //show loading
@@ -73,8 +92,8 @@ export class DetailPage implements OnInit {
           console.log(this.lng);
         }
       );
-            // //dismiss loading
-            this.loading.dismiss();
+      // //dismiss loading
+      this.loading.dismiss();
     } catch (error) {
       this.appService.presentToast(error);
     }

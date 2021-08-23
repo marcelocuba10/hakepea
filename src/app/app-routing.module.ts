@@ -49,6 +49,10 @@ const routes: Routes = [
     path: 'location',
     loadChildren: () => import('./pages/location/location.module').then( m => m.LocationPageModule)
   },
+  {
+    path: 'modal-detail',
+    loadChildren: () => import('./pages/modal-detail/modal-detail.module').then( m => m.ModalDetailPageModule)
+  },
 
 ];
 @NgModule({

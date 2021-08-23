@@ -20,11 +20,10 @@
         </ion-card-content>
         <ion-card-content>
           <ion-row style="margin-top: -73px;">
-            <ion-col size="3" class="ion-text-center">
+            <ion-col style="margin: auto;" size="3" class="ion-text-center">
               <ion-avatar class="avatar-align">
-                <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg">
-              </ion-avatar>
-              <ion-label>Conductor {{this.driver}}</ion-label>
+                <img src={{post.imgpath}}>
+              </ion-avatar> 
             </ion-col>
             <ion-col size="9">
               <ion-card-header>
@@ -76,7 +75,7 @@
         <ion-list *ngFor="let comment of comments">
           <ion-item style="margin-top:-20px">
             <ion-avatar slot="start">
-              <img src="https://ionicframework.com/docs/v4/demos/api/avatar/avatar.svg">
+              <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
             </ion-avatar>
             <ion-label class="ion-text-capitalize; ion-text-wrap" color="dark">
               <p style="font-weight: 500;">Conductor {{comment.driver}}</p>

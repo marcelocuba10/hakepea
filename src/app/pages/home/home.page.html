@@ -16,13 +16,36 @@
 
 <ion-content [fullscreen]="true">
   <ion-searchbar disabled="true" mode="ios" debounce="1000" animated placeholder="Buscar avisos..." (ionChange)="search($event)"> </ion-searchbar>
+  <ion-grid>
+  <ion-list-header style="margin-top: -15px;" >Buscar avisos por Ciudad:</ion-list-header>
+    <ion-row>
+      <ion-col size="4">
+          <ion-chip color="tertiary" (click)="searchByCity()">
+            <ion-icon name="location-outline" color="tertiary"></ion-icon>
+            <ion-label color="tertiary">Hernandarias</ion-label>
+          </ion-chip>
+      </ion-col>
+      <ion-col size="4">
+          <ion-chip color="secondary" (click)="searchByCity()">
+            <ion-icon name="location-outline" color="secondary"></ion-icon>
+            <ion-label color="secondary">Ciudad del Este</ion-label>
+          </ion-chip>
+      </ion-col>
+      <ion-col size="4">
+          <ion-chip color="success" (click)="searchByCity()">
+            <ion-icon name="location-outline" color="success"></ion-icon>
+            <ion-label color="success">Pte Franco</ion-label>
+          </ion-chip>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
   <div *ngIf="posts">
-    <ion-list-header>Alertas en tu zona:</ion-list-header>
+    <ion-list-header style="margin-top: -10px;">Todos los avisos:</ion-list-header>
 
     <ion-list *ngFor="let post of posts" style="background-color: #F4F4F4;">
       <ion-card [style.border-bottom]="getColorBorder(post.category)" style="border-radius: 25px;margin: 0px 20px 0px 20px;;box-shadow: 0 0.3rem 0.8rem rgb(0 0 0 / 12%);">
-        <ion-item class="no-padding" lines="full" button
-          [routerLink]="['../../detail/',post.id]">
+        <ion-item class="no-padding" lines="full" button  (click)="showModal(post.id)">  <!-- [routerLink]="['../../detail/',post.id]" -->
           <ion-thumbnail slot="start" style="margin-right: 5px;">
             <img src="{{post.imgpath}}" />
           </ion-thumbnail>
@@ -40,11 +63,7 @@
                 </div>
               </ion-col>
               <ion-col size="2.5">
-                <div style="
-                  margin-top: 5%;
-                  display: block;
-                  float: right;
-                ">
+                <div style="margin-top: 5%;display: block;float: right;">
                   <p>Calificación</p>
                   <ion-row style="float: right">
                     <ion-label class="p-font p-color-up">{{post.liked}}</ion-label>

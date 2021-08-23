@@ -1,3 +1,4 @@
+import { ModalDetailPage } from './../modal-detail/modal-detail.page';
 import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/services/app.service';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -9,6 +10,7 @@ import {
   PushNotificationActionPerformed
 } from '@capacitor/core';
 import { Subscription } from 'rxjs';
+import { ModalController } from '@ionic/angular';
 
 const { PushNotifications } = Plugins;
 
@@ -26,12 +28,13 @@ export class HomePage implements OnInit {
 
   constructor(
     private appService: AppService,
-    private firestore: AngularFirestore
+    private firestore: AngularFirestore,
+    private modalCtrl:ModalController
   ) { }
 
   getColorBorder(category) {
     switch (category) {
-      case 'Trafico':
+      case 'Trafico Vehicular':
         return '#2dd36f ridge';
       case 'Control Policial':
         return '#129cff ridge';
@@ -42,7 +45,7 @@ export class HomePage implements OnInit {
 
   getColorText(category) {
     switch (category) {
-      case 'Trafico':
+      case 'Trafico Vehicular':
         return '#2dd36f ridge';
       case 'Control Policial':
         return '#129cff ridge';
@@ -133,8 +136,25 @@ export class HomePage implements OnInit {
   //   })
   // }
 
-  async getPosts() {
+  async showModal(id:string){
+    console.log(id);
+    const modal = await this.modalCtrl.create({
+      component: ModalDetailPage,
+      cssClass: 'my-custom-class',
+      componentProps: {
+        id: id,
+      }
+    });
 
+    //lanzamos el modal
+    await modal.present();
+  }
+
+  searchByCity(){
+    this.appService.showToast("Función no habilitada");
+  }
+
+  async getPosts() {
     try {
       this.postSubscription = this.firestore.collection("posts", ref => ref.orderBy("timestamp", "desc")).snapshotChanges().subscribe(
         data => {

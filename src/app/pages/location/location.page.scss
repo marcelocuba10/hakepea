@@ -9,3 +9,11 @@
     height: 100%;
     display: block;
   }
+
+  .my-custom-class .alert-head .sc-ion-alert-md {
+    padding-left: 13px !important;
+    padding-right: 13px !important;
+    padding-top: 20px !important;
+    padding-bottom: 10px !important;
+    text-align: start;
+}
