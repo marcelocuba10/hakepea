@@ -188,7 +188,7 @@ export class AddPostPage implements OnInit {
   OnClick(category) {
     switch (category.name) {
       case category.name = "Policia":
-        this.post.category = "Control Policial";
+        this.post.category = "Puesto Policial";
         break;
       case category.name = "Trafico":
         this.post.category = "Trafico Vehicular";

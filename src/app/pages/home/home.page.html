@@ -8,16 +8,18 @@
     </ion-title>
     <ion-buttons slot="primary">
       <ion-button>
-        <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+        <ion-icon name="notifications-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar color="warning">
+  <ion-searchbar mode="ios" debounce="1000" animated placeholder="Buscar avisos..." (ionChange)="searchPost($event)"> </ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-searchbar disabled="true" mode="ios" debounce="1000" animated placeholder="Buscar avisos..." (ionChange)="search($event)"> </ion-searchbar>
   <ion-grid>
-  <ion-list-header style="margin-top: -15px;" >Buscar avisos por Ciudad:</ion-list-header>
+  <ion-list-header style="margin-top: -5px;" >Buscar avisos por Zonas:</ion-list-header>
     <ion-row>
       <ion-col size="4">
           <ion-chip color="tertiary" (click)="searchByCity()">
@@ -43,7 +45,7 @@
   <div *ngIf="posts">
     <ion-list-header style="margin-top: -10px;">Todos los avisos:</ion-list-header>
 
-    <ion-list *ngFor="let post of posts" style="background-color: #F4F4F4;">
+    <ion-list *ngFor="let post of posts | filtroBusqueda:textoBuscar" style="background-color: #F4F4F4;">
       <ion-card [style.border-bottom]="getColorBorder(post.category)" style="border-radius: 25px;margin: 0px 20px 0px 20px;;box-shadow: 0 0.3rem 0.8rem rgb(0 0 0 / 12%);">
         <ion-item class="no-padding" lines="full" button  (click)="showModal(post.id)">  <!-- [routerLink]="['../../detail/',post.id]" -->
           <ion-thumbnail slot="start" style="margin-right: 5px;">
@@ -84,6 +86,7 @@
     </ion-list>
   </div>
 
+<!-- Skeleton screen -->
   <div *ngIf="!posts">
     <ion-list>
       <ion-list-header>
