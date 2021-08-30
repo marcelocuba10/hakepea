@@ -37,33 +37,41 @@ export class HomePage implements OnInit {
   getColorBorder(category) {
     switch (category) {
       case 'Trafico Vehicular':
-        return '#2dd36f ridge';
+        return '#ff9800 ridge';
       case 'Puesto Policial':
         return '#129cff ridge';
       case 'Accidente de Tránsito':
         return '#ffc409 ridge';
+      case 'Desvío':
+        return '#ff5722 ridge';
+      case 'Comentario':
+        return 'rgb(83 221 73) ridge';
+      case 'Radar en Ruta':
+        return '#3f51b5 ridge';
     }
   }
 
   getColorText(category) {
     switch (category) {
       case 'Trafico Vehicular':
-        return '#2dd36f ridge';
+        return '#ff9800 ridge';
       case 'Puesto Policial':
         return '#129cff ridge';
       case 'Accidente de Tránsito':
         return '#ffc409 ridge';
+      case 'Desvío':
+        return '#ff5722 ridge';
+      case 'Comentario':
+        return 'rgb(83 221 73) ridge';
+      case 'Radar en Ruta':
+        return '#3f51b5 ridge';  
     }
   }
 
   ngOnInit() {
     this.getPosts();
-    console.log('Initializing HomePage');
 
-    // Request permission to use push notifications
-    // iOS will prompt user and return if they granted permission or not
-    // Android will just grant without prompting
-
+    // Push notifications
     PushNotifications.requestPermission().then(result => {
       if (result.granted) {
         PushNotifications.register();
@@ -135,7 +143,6 @@ export class HomePage implements OnInit {
     } catch (error) {
       this.appService.presentToast(error);
     }
-
   }
 
   ngOnDestroy() {

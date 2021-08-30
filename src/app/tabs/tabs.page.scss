@@ -1,0 +1,7 @@
+:host(.ion-color) ::slotted(.tab-selected) {
+    color: var(--ion-color-contrast);
+    background-color: #3a3937;
+    border-radius: 25px;
+    color: #fff;
+    box-shadow: 0 0 0.3rem rgb(0 0 0 / 53%);
+}

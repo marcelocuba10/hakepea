@@ -78,6 +78,9 @@ export class AppService {
     return await this.firestore.collection("about").valueChanges();
   }
 
+  async getCategories() {
+    return await this.firestore.collection("categories").valueChanges();
+  }
 
   async formValidation(model, page) {
 
