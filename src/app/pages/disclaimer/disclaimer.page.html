@@ -1,28 +1,28 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="tertiary">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Terminos de uso</ion-title>
+    <ion-title class="ion-text-center">Términos de uso</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button>
+        <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>Hakepea</ion-card-subtitle>
-      <ion-card-title>ACUERDO DE LICENCIA DE USUARIO FINAL</ion-card-title>
-    </ion-card-header>
+    <ion-card style="border-bottom: ridge #5260ff; border-radius: 25px;margin: 0px 18px;box-shadow: 0 0.3rem 0.8rem rgb(0 0 0 / 12%);">
+      <ion-card-header>
+        <ion-card-subtitle>HakePea</ion-card-subtitle>
+        <ion-card-title>ACUERDO DE LICENCIA DE USUARIO FINAL</ion-card-title>
+      </ion-card-header>
 
-    <ion-card-content>
-      Hakepea es una aplicación que ofrece Avisos de radares, policiales, alertas de tráfico en tiempo real e
-      información relevante para una conducción más segura y eficiente.
-      <ul>
-        <li>1) Al usar esta aplicación, usted está de acuerdo con los TERMINOS DE USO Y POLITICA DE PRIVACIDAD de Hakepea. El uso de este servicio está sujeto a éstos acuerdos y condiciones.</li>
-        <li>2) Siempre debe prestar toda su atención a la carretera, cumplir con las leyes y reglamentos de tráfico. Enviar actualizaciones de tráfico y mensajes de texto mientras se conduce, está estrictamente prohibido.</li>
-        <li>3) El uso de esta aplicación será bajo su propia responsabilidad. Hakepea se ofrece sin garantía de ningún tipo. Usted es responsable de cualquier uso ilícito que pudiera realizar con Hakepea que suponga cualquier incumplimiento legal.</li>
-      </ul> 
-    </ion-card-content>
-  </ion-card>
-
+      <ion-card-content>
+        <ul *ngFor="let disclaimer of disclaimers">
+          <li>{{disclaimer.description}}</li>
+        </ul> 
+      </ion-card-content>
+    </ion-card>
 </ion-content>

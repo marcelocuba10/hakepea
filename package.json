@@ -1,8 +1,8 @@
 {
-  "name": "hakepea",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "name": "HakePea",
+  "version": "0.1",
+  "author": "Bad Robots PY",
+  "homepage": "#",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -64,7 +64,7 @@
     "tslint": "~6.1.0",
     "typescript": "~3.8.3"
   },
-  "description": "An Ionic project",
+  "description": "Red Social de Conductores en Paraguay",
   "cordova": {
     "plugins": {
       "cordova-plugin-geolocation": {},

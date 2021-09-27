@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { Post } from 'src/app/models/post.model';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AppService } from 'src/app/services/app.service';
-import { ModalController, LoadingController, NavController } from '@ionic/angular';
+import { ModalController, LoadingController, NavController, AlertController } from '@ionic/angular';
 import { Component, OnInit, Input } from '@angular/core';
 import * as moment from 'moment';
 
@@ -19,26 +19,59 @@ export class ModalDetailPage implements OnInit {
   public post = {} as Post;
   private loading: any;
   public comment = {} as Comment;
-  public comments: any;
+  public comments: any= null;
   private likeOneTime = 0; //btn like o dislike, count one time forEach
   private countLike: number;
   private countDislike: number;
-  private driver: number;
   private postSubscription: Subscription;
   private commentSubscription: Subscription;
+
+  public driverNumber = Math.floor(Math.random() * 999) + 50;
+  public dateComment = moment().locale('es').format('dddd, D MMMM, h:mm a');
 
   constructor(
     private modalCtrl: ModalController,
     private appService: AppService,
     private loadingCtrl: LoadingController,
     private firestore: AngularFirestore,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private alertCtrl: AlertController
   ) { }
+  
 
-  ngOnInit() {
+   ngOnInit() {
     this.getPostById(this.id);
     this.getCommentById();
   }
+
+  ionViewWillEnter (){
+    //this.getCommentById();
+    
+  }
+
+  ionViewDidEnter (){
+    this.getCommentById();
+  }
+
+  ionViewDidLeave() {
+    this.comments=null;
+  }
+
+
+    async testecom(data : any){
+
+      const xx=data.length; 
+
+
+    if(xx===0){
+      console.log("no comments" + xx);
+      this.CreateCommentInitial();
+    }else{
+      console.log("yes, comments"+ xx);
+    }
+
+    }
+
 
   showMapWithMarkers() {
     //redirect to home
@@ -86,18 +119,20 @@ export class ModalDetailPage implements OnInit {
 
   async getCommentById() {
     try {
-      this.commentSubscription = this.firestore.collection("comments", ref => ref.where("idPost", "==", this.id).orderBy("timestamp", "desc")).snapshotChanges().subscribe(
-        data => {
-          this.comments = data.map(e => {
-            return {
-              id: e.payload.doc.id,
-              comment: e.payload.doc.data()["comment"],
-              date: e.payload.doc.data()["date"],
-              driver: e.payload.doc.data()["driver"],
-              idPost: e.payload.doc.data()["idPost"],
-            };
-          });
-        });
+       this.commentSubscription = this.firestore.collection("comments", ref => ref.where("idPost", "==", this.id).orderBy("timestamp", "desc")).snapshotChanges().subscribe(
+         data => {
+           this.comments = data.map(e => {
+             return {
+               id: e.payload.doc.id,
+               comment: e.payload.doc.data()["comment"],
+               date: e.payload.doc.data()["date"],
+               driver: e.payload.doc.data()["driver"],
+               idPost: e.payload.doc.data()["idPost"],
+             };
+           });
+         });
+
+         this.testecom(this.comments);
     } catch (error) {
       this.appService.presentToast(error);
     }
@@ -113,8 +148,8 @@ export class ModalDetailPage implements OnInit {
       try {
         this.comment.date = moment().locale('es').format('dddd, D MMMM, h:mm a');
         this.comment.timestamp = Date.now();
-        this.comment.driver = Math.floor(Math.random() * 999) + 50
         this.comment.idPost = this.id;
+        this.comment.driver=this.driverNumber;
         await this.firestore.collection("comments").add(comment);
       } catch (error) {
         this.appService.presentToast(error);
@@ -126,8 +161,21 @@ export class ModalDetailPage implements OnInit {
     }
   }
 
-  async increaseProgressUp() {
+  async CreateCommentInitial() {
+      try {
+        this.comment.comment="Gracias por tu aviso!";
+        this.comment.date = moment().locale('es').format('dddd, D MMMM, h:mm a');
+        this.comment.timestamp = Date.now();
+        this.comment.idPost = this.id;
+        this.comment.driver=this.driverNumber;
+        await this.firestore.collection("comments").add(this.comment);
+      } catch (error) {
+        this.appService.presentToast(error);
+        console.log(error);
+      }
+  }
 
+  async increaseProgressUp() {
     if (this.likeOneTime == 0) {
       this.likeOneTime = 1;
       this.post.liked += 1;
@@ -184,6 +232,11 @@ export class ModalDetailPage implements OnInit {
 
   clearFieldComment() {
     this.comment.comment = '';
+  }
+
+  ngOnDestroy() {
+    this.commentSubscription.unsubscribe();
+    this.postSubscription.unsubscribe();
   }
 
 }

@@ -1,12 +1,12 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="tertiary">
     <ion-buttons slot="start">
       <ion-button>
         <ion-icon name="notifications-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button color="danger" (click)="dismissModal()">
+      <ion-button (click)="dismissModal()">
         <ion-icon name="close-outline"></ion-icon> Cerrar
       </ion-button>
     </ion-buttons>
@@ -14,80 +14,177 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content style="overflow: scroll;overflow-y: initial;">
+<ion-content style="overflow: scroll; overflow-y: initial">
+  <ion-grid
+    style="
+      background: linear-gradient(
+        180deg,
+        rgba(82, 96, 255, 1) 0%,
+        rgba(61, 38, 232, 1) 100%
+      );
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+    "
+  >
+    <ion-row>
+      <ion-col> </ion-col>
+      <ion-col style="text-align: center; margin: 0 25%">
+        <ion-avatar (click)="showMapWithMarkers()">
+          <img src="{{post.imgpath}}" />
+        </ion-avatar>
+      </ion-col>
+      <ion-col> </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center">
+          <ion-text color="info">
+            <ion-card-title style="color: #fff" class="ion-text-capitalize;"
+              >{{post.detail}}</ion-card-title
+            >
+          </ion-text>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-text-center" style="margin-top: 5px">
+      <ion-col>
+        <ion-badge
+          style="background-color: #5f6ae6; color: #f1ee13; font-size: 14px"
+          >{{post.category}}</ion-badge
+        >
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-text-center">
+      <ion-col>
+        <ion-badge
+          style="background-color: #5f6ae6; color: #e0f5ff; font-size: 16px"
+          ><ion-icon style="vertical-align: top" name="time-outline"></ion-icon>
+          {{post.date}}</ion-badge
+        >
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-          <ion-grid>
-            <ion-row size="3">
-              <ion-col style="margin: auto;" size="3" class="ion-text-center">
-                <ion-avatar class="avatar-align" (click)="showMapWithMarkers()">
-                  <img src={{post.imgpath}}>
-                  <ion-icon (click)="showMapWithMarkers()" style="margin-top: -5px !important;font-size: 25px;font-weight: 500;color: #009688;" name="arrow-forward-circle-outline"></ion-icon>
-                </ion-avatar> 
-              </ion-col>
-              <ion-col size="9">
-                <ion-card-header>
-                  <ion-card-subtitle>{{post.date}}</ion-card-subtitle>
-                  <ion-card-title class="ion-text-capitalize">{{post.detail}}</ion-card-title>
-                  <ion-card-subtitle style="color: #4c8dff;">{{post.category}}</ion-card-subtitle>
-                </ion-card-header>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col> </ion-col>
+      <ion-col style="margin-bottom: -25px; margin-top: 10px">
+        <div class="rate">
+          <input checked type="radio" id="star5" name="rate" value="5" />
+          <label for="star5" title="text">5 stars</label>
+          <input checked type="radio" id="star4" name="rate" value="4" />
+          <label for="star4" title="text">4 stars</label>
+          <input checked type="radio" id="star3" name="rate" value="3" />
+          <label for="star3" title="text">3 stars</label>
+          <input type="radio" id="star2" name="rate" value="2" />
+          <label for="star2" title="text">2 stars</label>
+          <input type="radio" id="star1" name="rate" value="1" />
+          <label for="star1" title="text">1 star</label>
+        </div>
+      </ion-col>
+      <ion-col> </ion-col>
+    </ion-row>
 
-          <hr>
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center">
+          <ion-text color="info">
+            <h6>Por favor, Califica este aviso</h6>
+          </ion-text>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row style="margin-top: -11px">
+      <ion-col size="6">
+        <ion-button
+          style="float: right"
+          color="success"
+          shape="round"
+          (click)="increaseProgressUp()"
+        >
+          <ion-label style="margin-top: -2px" class=""
+            >{{post.liked}}</ion-label
+          >
+          <ion-icon
+            style="margin: -4px 3px 0px 3px"
+            name="thumbs-up"
+          ></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col style="text-align: center" size="6">
+        <ion-button
+          style="float: left"
+          color="danger"
+          shape="round"
+          (click)="increaseProgressDown()"
+        >
+          <ion-label style="margin-top: -2px" class=""
+            >{{post.disliked}}</ion-label
+          >
+          <ion-icon
+            style="margin: 2px 3px 0px 3px"
+            name="thumbs-down"
+          ></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-          <ion-grid style="margin-top: -40px;">
-            <ion-row>    
-              <ion-col>
-                <div class="ion-text-center">
-                  <ion-text color="info">
-                    <h6>Por favor, Califica este aviso</h6>
-                  </ion-text>
-                </div>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col size="6">
-                <ion-button style="float: right;" color="success" shape="round" (click)="increaseProgressUp()">
-                  <ion-label style="margin-top: -2px;" class="">{{post.liked}}</ion-label>
-                  <ion-icon style="margin: -4px 3px 0px 3px;" name="thumbs-up"></ion-icon>
-                </ion-button>
-              </ion-col>
-              <ion-col style="text-align: center;" size="6">
-                <ion-button style="float: left;" color="danger" shape="round" (click)="increaseProgressDown()">
-                  <ion-label style="margin-top: -2px;" class="">{{post.disliked}}</ion-label>
-                  <ion-icon style="margin: 2px 3px 0px 3px;" name="thumbs-down"></ion-icon>
-                </ion-button>
-              </ion-col>
-            </ion-row>
-          </ion-grid>  
+  <ion-grid
+    style="
+      padding: 0;
+      margin: 0 10px;
+background: linear-gradient(90deg, rgba(115,233,246,1) 0%, rgba(113,241,170,1) 100%);
+      border-radius: 40px;
+      margin-top: 15px;">
+    <ion-row>
+      <ion-col style="padding: 0; margin-top: -7px">
+        <div class="ion-text-center">
+          <ion-text color="info">
+            <h6 style="color: #206861">Comentarios</h6>
+          </ion-text>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-          <h6 style="margin-left: 12px;">Comentarios:</h6>
+  <ion-grid style="margin-left: 0px; margin-right: 10px">
+    <ion-row style="height: 80px">
+      <ion-col size="10">
+        <ion-textarea
+          [(ngModel)]="comment.comment"
+          style="background-color: #e2e2e2b8; border-radius: 15px"
+          maxlength="500"
+          minlength="20"
+          clear-on-edit="true"
+          placeholder="Escriba un comentario.."></ion-textarea>
+      </ion-col>
+      <ion-col size="2">
+        <ion-button style="margin-top: 20px" (click)="CreateComment(comment)">
+          <ion-icon slot="icon-only" name="send-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-      <ion-grid style="margin-left: 0px;margin-right: 10px;">  
-        <ion-row style="height: 80px;">
-          <ion-col size="10">
-            <ion-textarea [(ngModel)]="comment.comment" style="background-color: #e2e2e2b8;border-radius: 15px;" maxlength="500" minlength="20" clear-on-edit="true" class="ion-text-capitalize"  placeholder="Escriba un comentario.."></ion-textarea>
-          </ion-col>
-          <ion-col size="2">
-          <ion-button style="margin-top: 20px;" (click)="CreateComment(comment)">
-            <ion-icon slot="icon-only" name="send-outline"></ion-icon>
-          </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>  
+  <div *ngIf="comments">
+    <ion-list *ngFor="let comment of comments">
+    <ion-item style="padding: 0px 5px;border: solid 2px #a685f9;margin: 0 10px;border-radius: 40px;">
+      <ion-avatar slot="start">
+        <ion-icon
+          style="font-size: 40px; margin-top: -4px; color: #a685f9"
+          name="person-sharp"></ion-icon>
+      </ion-avatar>
+      <ion-label color="dark" style="margin: 7px 0px">
+        <p style="font-weight: 700">Conductor {{comment.driver}}</p>
+        <p>{{comment.comment}}</p>
+        <p style="color: #4c8dff; margin-top: -7px">
+          <sub>{{comment.date}}</sub>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  </div>
 
-       <ion-list *ngFor="let comment of comments">
-          <ion-item style="margin-top:-20px">
-            <ion-avatar slot="start">
-              <ion-icon style="font-size: 32px;color: darkcyan;" name="chatbubble-ellipses-outline"></ion-icon>
-            </ion-avatar>
-            <ion-label class="ion-text-capitalize; ion-text-wrap" color="dark">
-              <p style="font-weight: 500;">Conductor {{comment.driver}}</p>
-              <p class="ion-text-capitalize">{{comment.comment}}</p>
-              <p style="color: #4c8dff;margin-top: -7px;"><sub>{{comment.date}}</sub></p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
 
 </ion-content>

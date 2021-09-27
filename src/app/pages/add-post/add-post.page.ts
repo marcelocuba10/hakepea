@@ -1,11 +1,13 @@
 import { Subscription } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild, ElementRef } from '@angular/core';
 import * as moment from 'moment';
 import { Post } from '../../models/post.model';
 import { AppService } from 'src/app/services/app.service';
 import { NavController, AlertController, LoadingController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { GoogleMap } from "@ionic-native/google-maps";
+import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 
 declare const google;
 @Component({
@@ -18,13 +20,19 @@ export class AddPostPage implements OnInit {
   categories: any;
   private categoriesSubscription: Subscription;
   mapRef: any;
+  map : any;
   public myLatLng: any;
   toggleValue: boolean = true;
   public borderColor: any;
   public btnSelected: any;
 
-  // private lat: number;
-  // private lng: number;
+  address:string;
+  placeid: any;
+
+  @ViewChild('map', { static: false }) mapElement: ElementRef;
+
+  latitude: number;
+  longitude: number;
 
   constructor(
     private appService: AppService,
@@ -33,11 +41,13 @@ export class AddPostPage implements OnInit {
     private alertCtrl: AlertController,
     private geolocation: Geolocation,
     private loadingCtrl: LoadingController,
+    private nativeGeocoder: NativeGeocoder, 
   ) { }
 
   async ngOnInit() {
     this.myLatLng = await this.getLocation();
     this.getCategories();
+    this.loadMap();
   }
 
   //ejecuta cuando cada vez que salimos de la pagina
@@ -46,17 +56,66 @@ export class AddPostPage implements OnInit {
   }
 
   private async getLocation() {
+
     const rta = await this.geolocation.getCurrentPosition();
     return {
       lat: rta.coords.latitude,
       lng: rta.coords.longitude
     };
+    
+  }
+
+  loadMap() {
+    this.geolocation.getCurrentPosition().then((resp) => {
+      let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+      let mapOptions = {
+        center: latLng,
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      }
+      this.getAddressFromCoords(resp.coords.latitude, resp.coords.longitude);
+      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+      this.map.addListener('tilesloaded', () => {
+        console.log('accuracy',this.map);
+        this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng())
+      });
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
+ }
+
+  getAddressFromCoords(lattitude, longitude) {
+    console.log("getAddressFromCoords " + lattitude+ " " +longitude);
+    let options: NativeGeocoderOptions = {
+      useLocale: true,
+      maxResults: 5
+    };
+
+    this.nativeGeocoder.reverseGeocode(lattitude, longitude, options)
+      .then((result: NativeGeocoderResult[]) => {
+        this.address = "";
+        let responseAddress = [];
+        for (let [key, value] of Object.entries(result[0])) {
+          if (value.length > 0)
+            responseAddress.push(value);
+
+        }
+        responseAddress.reverse();
+        for (let value of responseAddress) {
+          this.address += value + ", ";
+        }
+        this.address = this.address.slice(0, -2);
+      })
+      .catch((error: any) => {
+        this.address = "Address Not Available!";
+      });
+
   }
 
   async createPost(post: Post) {
     this.appService.presentLoading(1);
     try {
-      this.post.date = moment().locale('es').format('dddd, D MMMM, h:mm a');
+      this.post.date = moment().locale('es').format('LT');
       this.post.timestamp = Date.now();
       this.post.liked = 1;
       this.post.disliked = 0;
@@ -146,7 +205,7 @@ export class AddPostPage implements OnInit {
   OnClick(category) {
     switch (category.name) {
 
-      case category.name = "Policía":
+      case category.name = ".Policía":
         this.post.category = "Puesto Policial";
         this.btnSelected = category.name;
         break;
@@ -162,11 +221,11 @@ export class AddPostPage implements OnInit {
         this.post.category = "Desvío";
         this.btnSelected = category.name;
         break;
-      case category.name = "Comentario":
+      case category.name = ".Comentario":
         this.post.category = "Comentario";
         this.btnSelected = category.name;
         break;
-      case category.name = "Radar":
+      case category.name = ".Radar":
         this.post.category = "Radar en Ruta";
         this.btnSelected = category.name;
         break;
@@ -221,44 +280,5 @@ export class AddPostPage implements OnInit {
   //     snippet: 'This plugin is awesome!',
   //   });
   // }
-
-  // categories = [
-  //   {
-  //     name: 'Policía',
-  //     imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Fpolice-icon-80x80%20(1).png?alt=media&token=80caac4b-25f2-491d-9c59-8ee60a15dd41',
-  //     imgpathMarker: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/maps%2Ficon-marker-police1.png?alt=media&token=ce25aac6-752c-4b30-9613-c8f9c6f9edbb',
-  //     color: 'secondary',
-  //   },
-  //   {
-  //     name: 'Tráfico',
-  //     imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/maps%2Ftrafico-icon-80x80.png?alt=media&token=cd29c6ef-e937-412f-a788-071e4278e258',
-  //     imgpathMarker: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/maps%2Ficon-marker-police1.png?alt=media&token=ce25aac6-752c-4b30-9613-c8f9c6f9edbb',
-  //     color: 'success',
-  //   },
-  //   {
-  //     name: 'Accidente',
-  //     imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/maps%2Faccident-icon-80x80%20(1).png?alt=media&token=a9365128-af1f-4236-95c7-49705a7c4d80',
-  //     imgpathMarker: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/maps%2Ficon-marker-accident-100x150%20(2).png?alt=media&token=3fbf4731-9101-4944-822f-2683e1350310',
-  //     color: 'danger',
-  //   },
-  //   {
-  //     name: 'Radar',
-  //     imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/maps%2Fradar-police-icon-80x80%20(1).png?alt=media&token=46c374a3-455a-4065-9e84-e929253580aa',
-  //     imgpathMarker: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/maps%2Ficon-marker-radar-150x200%20(1).png?alt=media&token=0a0604a9-cd01-4a8d-85c0-57ffaea10009',
-  //     color: 'light',
-  //   },
-  //   {
-  //     name: 'Comentario',
-  //     imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/maps%2Fmessage-icon-80x80%20(1).png?alt=media&token=74cb98f7-23b5-43b4-b084-0688a409bc2d',
-  //     imgpathMarker: '#',
-  //     color: 'medium',
-  //   },
-  //   {
-  //     name: 'Desvío',
-  //     imgpath: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/maps%2Fdesvio-icon-80x80-2%20(1).png?alt=media&token=ccc2b30d-184d-4021-a780-981b082ce022',
-  //     imgpathMarker: 'https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/maps%2Ficon-marker-desvio-150x200%20(1).png?alt=media&token=6d9840ad-6469-471a-b559-16fab13446d1',
-  //     color: 'tertiary',
-  //   }
-  // ];
 
 }

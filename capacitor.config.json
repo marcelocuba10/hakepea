@@ -1,6 +1,6 @@
 {
   "appId": "app.hakepea",
-  "appName": "hakepea",
+  "appName": "HakePea",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",

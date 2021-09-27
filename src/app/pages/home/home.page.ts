@@ -52,6 +52,7 @@ export class HomePage implements OnInit {
   }
 
   getColorText(category) {
+    console.log("category in getcolortext" + category);
     switch (category) {
       case 'Trafico Vehicular':
         return '#ff9800 ridge';

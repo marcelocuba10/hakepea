@@ -74,12 +74,16 @@ export class AppService {
     return await this.firestore.collection("posts").valueChanges();
   }
 
-  async getCards() {
+  async getTextInfos() {
     return await this.firestore.collection("about").valueChanges();
   }
 
+  async getTextDisclaimer(){
+    return await this.firestore.collection("disclaimer", ref => ref.orderBy("description", "asc")).valueChanges();
+  }
+
   async getCategories() {
-    return await this.firestore.collection("categories").valueChanges();
+    return await this.firestore.collection("categories", ref => ref.orderBy("name", "asc")).valueChanges();
   }
 
   async formValidation(model, page) {

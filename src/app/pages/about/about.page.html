@@ -1,7 +1,7 @@
   <ion-header translucent>
-    <ion-toolbar color="warning">
+    <ion-toolbar color="tertiary">
       <ion-buttons slot="start">
-        <ion-back-button defaultHref="/"></ion-back-button>
+        <ion-menu-button></ion-menu-button>
       </ion-buttons>
       <ion-title class="ion-text-center">Informaciones</ion-title>
       <ion-buttons slot="primary">
@@ -13,15 +13,14 @@
   </ion-header>
 
 <ion-content>
-  <ion-list *ngFor="let card of cards">
-    <ion-card>
-      <img style="height: 160px;width: auto; float: right;" src="{{card.img}}" />
+  <ion-list *ngFor="let text of texts">
+    <ion-card style="border-bottom: ridge #5260ff; border-radius: 25px;margin: 0px 18px;box-shadow: 0 0.3rem 0.8rem rgb(0 0 0 / 12%);">
+      <img style="height: 160px;width: auto; float: right;" src="{{text.img}}" />
       <ion-card-header>
-        <ion-card-subtitle>Descripción:</ion-card-subtitle>
-        <ion-card-title>{{card.title}}</ion-card-title>
+        <ion-card-title>{{text.title}}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        {{card.content}}
+        {{text.content}}
       </ion-card-content>
     </ion-card>
   </ion-list>
