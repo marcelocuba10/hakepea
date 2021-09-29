@@ -1,12 +1,12 @@
 <ion-header>
-  <ion-toolbar color="warning">
+  <ion-toolbar color="tertiary">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">Moderador</ion-title>
+    <ion-title class="ion-text-center">Iniciar Sesión</ion-title>
     <ion-buttons slot="primary">
       <ion-button>
-        <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+        <ion-icon name="lock-closed"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -15,13 +15,23 @@
 <ion-content class="ion-text-center">
 
   <body>
-    <aside>&nbsp;</aside>
+    <aside style="background: linear-gradient(180deg,rgba(82, 96, 255, 1) 0%,rgba(61, 38, 232, 1) 100%);">&nbsp;
+      <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center">
+          <img style="width: 30vw;" src="https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/icon-login.png?alt=media&token=f34295da-2f7d-4c42-9762-f2e318929b07" />
+        </div>
+      </ion-col>
+    </ion-row>
+    </ion-grid>
+    </aside>
     <main>&nbsp;</main>
   </body>
 
   <ion-card class="card-style">
     <ion-card-header>
-      <ion-card-title>Iniciar Sesión</ion-card-title>
+      <ion-card-title>Ingresar datos</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-item>
@@ -34,8 +44,8 @@
           <ion-icon name="key-outline"></ion-icon>&nbsp;&nbsp;
         </ion-input>
       </ion-item>
-      <ion-button class="ion-padding" size="default" color="primary" (click)="login()">
-        Entrar
+      <ion-button class="ion-padding" expand="block" size="large" color="success" (click)="login()">
+        Entrar <ion-icon name="chevron-forward"></ion-icon>
       </ion-button>
       <!-- <ion-button class="ion-padding" expand="full" color="light" [routerLink]="['../../register']">
         Registrar

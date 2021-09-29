@@ -2,11 +2,11 @@
   <ion-toolbar color="tertiary">
     <ion-buttons slot="start">
       <ion-button>
-        <ion-icon name="notifications-outline"></ion-icon>
+        <ion-icon name="notifications"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="dismissModal()">
+      <ion-button style="color: #f1ee13;" (click)="dismissModal()">
         <ion-icon name="close-outline"></ion-icon> Cerrar
       </ion-button>
     </ion-buttons>
@@ -15,17 +15,7 @@
 </ion-header>
 
 <ion-content style="overflow: scroll; overflow-y: initial">
-  <ion-grid
-    style="
-      background: linear-gradient(
-        180deg,
-        rgba(82, 96, 255, 1) 0%,
-        rgba(61, 38, 232, 1) 100%
-      );
-      border-bottom-left-radius: 50px;
-      border-bottom-right-radius: 50px;
-    "
-  >
+  <ion-grid style="background: linear-gradient(180deg,rgba(82, 96, 255, 1) 0%,rgba(61, 38, 232, 1) 100%);border-bottom-left-radius: 50px;border-bottom-right-radius: 50px;">
     <ion-row>
       <ion-col> </ion-col>
       <ion-col style="text-align: center; margin: 0 25%">
@@ -39,28 +29,20 @@
       <ion-col>
         <div class="ion-text-center">
           <ion-text color="info">
-            <ion-card-title style="color: #fff" class="ion-text-capitalize;"
-              >{{post.detail}}</ion-card-title
-            >
+            <ion-card-title style="color: #fff" class="ion-text-capitalize;">{{post.detail}}</ion-card-title>
           </ion-text>
         </div>
       </ion-col>
     </ion-row>
     <ion-row class="ion-text-center" style="margin-top: 5px">
       <ion-col>
-        <ion-badge
-          style="background-color: #5f6ae6; color: #f1ee13; font-size: 14px"
-          >{{post.category}}</ion-badge
-        >
+        <ion-badge style="background-color: #5f6ae6; color: #f1ee13; font-size: 16px">{{post.category}}</ion-badge>
       </ion-col>
     </ion-row>
     <ion-row class="ion-text-center">
       <ion-col>
         <ion-badge
-          style="background-color: #5f6ae6; color: #e0f5ff; font-size: 16px"
-          ><ion-icon style="vertical-align: top" name="time-outline"></ion-icon>
-          {{post.date}}</ion-badge
-        >
+          style="background-color: #5f6ae6; color: #e0f5ff; font-size: 17px"><ion-icon style="vertical-align: top" name="time-outline"></ion-icon>{{post.date}}</ion-badge>
       </ion-col>
     </ion-row>
   </ion-grid>
