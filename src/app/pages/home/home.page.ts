@@ -2,11 +2,8 @@ import { ModalDetailPage } from './../modal-detail/modal-detail.page';
 import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/services/app.service';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Plugins, PushNotification, PushNotificationToken, PushNotificationActionPerformed } from '@capacitor/core';
 import { Subscription } from 'rxjs';
 import { ModalController } from '@ionic/angular';
-
-const { PushNotifications } = Plugins;
 
 @Component({
   selector: 'app-home',
@@ -71,39 +68,6 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.getPosts();
-
-    // Push notifications
-    PushNotifications.requestPermission().then(result => {
-      if (result.granted) {
-        PushNotifications.register();
-      } else {
-        // Show some error
-      }
-    });
-
-    PushNotifications.addListener('registration',
-      (token: PushNotificationToken) => {
-        console.log("Push registration success");
-      }
-    );
-
-    PushNotifications.addListener('registrationError',
-      (error: any) => {
-        console.log("Error on registration");
-      }
-    );
-
-    PushNotifications.addListener('pushNotificationReceived',
-      (notification: PushNotification) => {
-        console.log("Push received");
-      }
-    );
-
-    PushNotifications.addListener('pushNotificationActionPerformed',
-      (notification: PushNotificationActionPerformed) => {
-        console.log("Push action performed");
-      }
-    );
   }
 
 

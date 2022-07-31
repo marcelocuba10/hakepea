@@ -9,5 +9,17 @@
       "launchShowDuration": 0
     }
   },
-  "cordova": {}
+  "cordova": {
+    "preferences": {
+      "ScrollEnabled": "false",
+      "BackupWebStorage": "none",
+      "SplashMaintainAspectRatio": "true",
+      "FadeSplashScreenDuration": "300",
+      "SplashShowOnlyFirstTime": "false",
+      "SplashScreen": "screen",
+      "SplashScreenDelay": "3000",
+      "GOOGLE_MAPS_ANDROID_API_KEY": "AIzaSyCMDLhN6hPU7MJ_KzfZTrfHbsta1dg-jEI",
+      "GOOGLE_MAPS_IOS_API_KEY": "(API KEY)"
+    }
+  }
 }

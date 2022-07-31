@@ -1,43 +1,47 @@
 <ion-app>
-  <!-- <ion-router-outlet></ion-router-outlet> -->
-  <ion-split-pane contentId="menu-content" when="xs" [disabled]="true"
-    (ionSplitPaneVisible)="onSplitPaneVisible(event)">
-    <ion-menu contentId="menu-content" menuId="menu-content" side="start" type="overlay">
-      <ion-header>
-        <ion-toolbar translucent>
-          <ion-title>Menu</ion-title>
-        </ion-toolbar>
-      </ion-header>
+  <ion-split-pane contentId="main-content">
+    <ion-menu type="overlay" contentId="main-content">
       <ion-content>
-        <ion-list>
+      
+        <div class="menu-header-bg">
+          <div class="header-content">
+            <img src="https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/logos%2Flogo-app-12.png?alt=media&token=12e00fc5-9707-4d94-8588-5cc5a281f714">
+            <ion-label>
+              <h2>Hakepea</h2>
+              <p class="head-subtitle-center">Red Social de Conductores</p>
+            </ion-label>
+          </div>
+        </div>
+
+        <ion-list id="inbox-list" class="menu-items" lines="none">
           <ion-menu-toggle auto-hide="false">
             <ion-item [routerLink]="['/tabs']">
-              <ion-icon name="home" slot="start"></ion-icon>
-              <ion-label>Inicio</ion-label>
+              <ion-icon name="grid-outline"></ion-icon><ion-label>Inicio</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item [routerLink]="['/location']">
+              <ion-icon name="earth-outline"></ion-icon><ion-label>Mapa</ion-label>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
             <ion-item [routerLink]="['/login']">
-              <ion-icon name="person" slot="start"></ion-icon>
-              <ion-label>Moderador</ion-label>
+              <ion-icon name="person-outline"></ion-icon><ion-label>Moderador</ion-label>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
             <ion-item [routerLink]="['/tabs/disclaimer']">
-              <ion-icon name="receipt-sharp" slot="start"></ion-icon>
-              <ion-label>Aviso Legal</ion-label>
+              <ion-icon name="reader-outline"></ion-icon><ion-label>Aviso Legal</ion-label>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
             <ion-item>
-              <ion-icon name="logo-facebook" slot="start"></ion-icon>
-              <ion-label>Síguenos en Facebook</ion-label>
+              <ion-icon name="share-social-sharp"></ion-icon><ion-label>Compartir con amigos</ion-label>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
             <ion-item>
-              <ion-icon name="share-social-sharp" slot="start"></ion-icon>
-              <ion-label>Compartir Hakepea</ion-label>
+              <ion-icon name="happy-outline"></ion-icon><ion-label>Califica la App</ion-label>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
@@ -53,8 +57,9 @@
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
+
       </ion-content>
     </ion-menu>
-    <ion-router-outlet id="menu-content"></ion-router-outlet>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-split-pane>
 </ion-app>
