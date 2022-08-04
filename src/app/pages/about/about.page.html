@@ -13,15 +13,16 @@
   </ion-header>
 
 <ion-content>
+
   <ion-list *ngFor="let text of texts">
-    <ion-card style="border-bottom: ridge #5260ff; border-radius: 25px;margin: 0px 18px;box-shadow: 0 0.3rem 0.8rem rgb(0 0 0 / 12%);">
-      <img style="height: 160px;width: auto; float: right;" src="{{text.img}}" />
-      <ion-card-header>
-        <ion-card-title>{{text.title}}</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        {{text.content}}
-      </ion-card-content>
-    </ion-card>
+    <ion-item>
+      <ion-thumbnail slot="end">
+        <img (click)="openLink(text.content)" style="width: auto;" src="{{text.img}}" />
+      </ion-thumbnail>
+      <ion-label>
+        <h3 style="white-space: pre-wrap;">{{text.title}}</h3>
+      </ion-label>
+    </ion-item>
   </ion-list>
+
 </ion-content>

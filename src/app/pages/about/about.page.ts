@@ -28,4 +28,8 @@ export class AboutPage implements OnInit {
     }
   }
 
+  async openLink(Url){
+    window.open(Url, '_system' , 'location=no');  
+  }
+
 }

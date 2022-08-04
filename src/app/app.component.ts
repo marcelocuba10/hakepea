@@ -24,4 +24,9 @@ export class AppComponent {
       this.splashScreen.hide();
     });
   }
+
+  async openLink(Url){
+    window.open('https://play.google.com/store/apps/details?id=app.hakepea', '_system' , 'location=no');  
+  }
+
 }
