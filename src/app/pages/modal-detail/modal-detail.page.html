@@ -1,21 +1,26 @@
-<ion-header>
+
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button style="color: #f1ee13;font-size: 22px;" (click)="dismissModal()">
+      <ion-button style="font-size: 22px;" (click)="dismissModal()">
         <ion-icon name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title class="ion-text-center">Aviso</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
-</ion-header>
+
 
 <ion-content style="overflow: scroll; overflow-y: initial">
 
   <ion-grid style="border-bottom-left-radius: 50px;border-bottom-right-radius: 50px;">
     <ion-card-header>
-      <ion-card-title style="color: #221e70;">{{post.category}}</ion-card-title>
+      <ion-card-title style="font-size: 24px;font-weight: 800;color: #221e70;">{{post.category}}</ion-card-title>
     </ion-card-header>
-    <ion-card-content style="color: #222428;">{{post.detail}}</ion-card-content>
+    <ion-card-content style="color: #222428;font-size: 18px;">{{post.detail}}</ion-card-content>
     <ion-row style="margin-top:-10px">
       <ion-col size="5">       
         <ion-chip (click)="showMapWithMarkers()" color="tertiary">
@@ -99,7 +104,7 @@
     <ion-row>
       <ion-col style="padding: 0; margin-top: -7px">
           <ion-text color="info">
-            <h6>Comentarios</h6>
+            <h4 style="font-weight: 600;">Comentarios</h4>
           </ion-text>
       </ion-col>
     </ion-row>
@@ -117,10 +122,7 @@
           placeholder="Escriba un comentario.."></ion-textarea>
       </ion-col>
       <ion-col size="2">
-        <ion-button color="success" style="margin-top: 0px;
-        height: -webkit-fill-available;
-        padding-bottom: 12px;
-        padding-top: 6px;" (click)="CreateComment(comment)">
+        <ion-button color="success" style="margin-top: 6px;height: -webkit-fill-available;padding-bottom: 6px;padding-top: 6px;" (click)="CreateComment(comment)">
           <ion-icon slot="icon-only" name="send-outline"></ion-icon>
         </ion-button>
       </ion-col>
@@ -128,22 +130,22 @@
   </ion-grid>
 
   <div *ngIf="comments">
-    <ion-list *ngFor="let comment of comments">
-    <ion-item lines="none" style="padding: 0px 5px;border: solid 1px #67656c26;margin: 5px 10px;border-radius: 5px;">
-      <ion-avatar slot="start">
-        <ion-icon
-          style="font-size: 40px; margin-top: -4px; color: #0e0e0e"
-          name="person-sharp"></ion-icon>
-      </ion-avatar>
-      <ion-label color="dark" style="margin: 7px 0px">
-        <p style="font-weight: 700">Conductor {{comment.driver}}</p>
-        <p>{{comment.comment}}</p>
-        <p style="color: #1c7c43; margin-top: -7px;padding-bottom: 2px;">
-          <sub>{{comment.date}}</sub>
-        </p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+    <ion-list *ngFor="let comment of comments" style="margin-bottom: -5px;">
+      <ion-item lines="none" style="padding: 0px 5px;border: solid 1px #67656c26;margin: 0px 10px;border-radius: 5px;">
+        <ion-avatar slot="start">
+          <ion-icon
+            style="font-size: 40px; margin-top: -4px; color: #666666"
+            name="person-sharp"></ion-icon>
+        </ion-avatar>
+        <ion-label color="dark" style="margin: 7px 0px">
+          <p style="font-weight: 700">Conductor {{comment.driver}}</p>
+          <p>{{comment.comment}}</p>
+          <p style="color: #1c7c43; margin-top: -7px;padding-bottom: 2px;">
+            <sub>{{comment.date}}</sub>
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
   </div>
 
 

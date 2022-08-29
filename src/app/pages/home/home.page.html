@@ -4,8 +4,13 @@
       <ion-menu-button style="font-size: 25px;"></ion-menu-button>
     </ion-buttons>
     <ion-title style="font-weight: 700;" class="ion-text-center">
-      Avisos del Tránsito
+      Avisos en Ruta
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
   <ion-toolbar color="tertiary" style="padding-bottom: 5px;border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;box-shadow: 0px 8px 5px 3px #f3f3f3;">
   <ion-searchbar style="color:#000" mode="ios" debounce="1000" animated placeholder="Buscar ej: km5" (ionChange)="searchPost($event)"> </ion-searchbar>
@@ -14,7 +19,7 @@
 
 <ion-content [fullscreen]="true">
   <div *ngIf="posts">
-    <ion-list *ngFor="let post of posts | filtroBusqueda:textoBuscar" style="background-color: #F4F4F4;margin-bottom: -21px;margin-top: -21px;">
+    <ion-list *ngFor="let post of posts | filtroBusqueda:textoBuscar" style="background-color: #F4F4F4;margin-bottom: 5px;margin-top: -21px;">
       
       <ion-card style="margin-top: 10px;border-bottom: ridge 4px #a0a0a3; border-radius: 25px;" (click)="showModal(post.id)">
         <ion-item lines="none">
