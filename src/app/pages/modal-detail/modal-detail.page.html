@@ -1,13 +1,8 @@
 <ion-header>
-  <ion-toolbar color="tertiary">
+  <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button>
-        <ion-icon name="notifications"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button style="color: #f1ee13;" (click)="dismissModal()">
-        <ion-icon name="close-outline"></ion-icon> Cerrar
+      <ion-button style="color: #f1ee13;font-size: 22px;" (click)="dismissModal()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title class="ion-text-center">Aviso</ion-title>
@@ -15,35 +10,31 @@
 </ion-header>
 
 <ion-content style="overflow: scroll; overflow-y: initial">
-  <ion-grid style="background: linear-gradient(180deg,rgba(82, 96, 255, 1) 0%,rgba(61, 38, 232, 1) 100%);border-bottom-left-radius: 50px;border-bottom-right-radius: 50px;">
-    <ion-row>
-      <ion-col> </ion-col>
-      <ion-col style="text-align: center; margin: 0 25%">
-        <ion-avatar (click)="showMapWithMarkers()">
-          <img src="{{post.imgpath}}" />
-        </ion-avatar>
+
+  <ion-grid style="border-bottom-left-radius: 50px;border-bottom-right-radius: 50px;">
+    <ion-card-header>
+      <ion-card-title style="color: #221e70;">{{post.category}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content style="color: #222428;">{{post.detail}}</ion-card-content>
+    <ion-row style="margin-top:-10px">
+      <ion-col size="5">       
+        <ion-chip (click)="showMapWithMarkers()" color="tertiary">
+          <ion-icon name="location-outline"></ion-icon>
+          <ion-label>Ver ubicación</ion-label>
+        </ion-chip>
       </ion-col>
-      <ion-col> </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <div class="ion-text-center">
-          <ion-text color="info">
-            <ion-card-title style="color: #fff" class="ion-text-capitalize;">{{post.detail}}</ion-card-title>
-          </ion-text>
-        </div>
+      <ion-col size="4">       
+        <ion-chip (click)="showMapWithMarkers()" color="tertiary">
+          <ion-icon name="time-outline"></ion-icon>
+          <ion-label>{{post.date}}</ion-label>
+        </ion-chip>
       </ion-col>
-    </ion-row>
-    <ion-row class="ion-text-center" style="margin-top: 5px">
-      <ion-col>
-        <ion-badge style="background-color: #5f6ae6; color: #f1ee13; font-size: 16px">{{post.category}}</ion-badge>
-      </ion-col>
-    </ion-row>
-    <ion-row class="ion-text-center">
-      <ion-col>
-        <ion-badge
-          style="background-color: #5f6ae6; color: #e0f5ff; font-size: 17px"><ion-icon style="vertical-align: top" name="time-outline"></ion-icon>{{post.date}}</ion-badge>
-      </ion-col>
+      <ion-col size="3">
+        <ion-chip color="tertiary">
+          <ion-icon name="eye-outline"></ion-icon>
+          <ion-label>542</ion-label>
+        </ion-chip>
+      </ion-col>  
     </ion-row>
   </ion-grid>
 
@@ -80,52 +71,36 @@
       <ion-col size="6">
         <ion-button
           style="float: right"
-          color="success"
+          color="tertiary"
           shape="round"
-          (click)="increaseProgressUp()"
-        >
-          <ion-label style="margin-top: -2px" class=""
-            >{{post.liked}}</ion-label
-          >
+          (click)="increaseProgressUp()">
+          <ion-label style="margin-top: -2px" class="">{{post.liked}}</ion-label>
           <ion-icon
             style="margin: -4px 3px 0px 3px"
-            name="thumbs-up"
-          ></ion-icon>
+            name="thumbs-up"></ion-icon>
         </ion-button>
       </ion-col>
       <ion-col style="text-align: center" size="6">
         <ion-button
           style="float: left"
-          color="danger"
+          color="secondary"
           shape="round"
-          (click)="increaseProgressDown()"
-        >
-          <ion-label style="margin-top: -2px" class=""
-            >{{post.disliked}}</ion-label
-          >
+          (click)="increaseProgressDown()">
+          <ion-label style="margin-top: -2px" class="">{{post.disliked}}</ion-label>
           <ion-icon
             style="margin: 2px 3px 0px 3px"
-            name="thumbs-down"
-          ></ion-icon>
+            name="thumbs-down"></ion-icon>
         </ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
 
-  <ion-grid
-    style="
-      padding: 0;
-      margin: 0 10px;
-background: linear-gradient(90deg, rgba(115,233,246,1) 0%, rgba(113,241,170,1) 100%);
-      border-radius: 40px;
-      margin-top: 15px;">
+  <ion-grid style=" padding: 0; margin: 0 10px; border-radius: 40px; margin-top: 15px;">
     <ion-row>
       <ion-col style="padding: 0; margin-top: -7px">
-        <div class="ion-text-center">
           <ion-text color="info">
-            <h6 style="color: #206861">Comentarios</h6>
+            <h6>Comentarios</h6>
           </ion-text>
-        </div>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -135,14 +110,17 @@ background: linear-gradient(90deg, rgba(115,233,246,1) 0%, rgba(113,241,170,1) 1
       <ion-col size="10">
         <ion-textarea
           [(ngModel)]="comment.comment"
-          style="background-color: #e2e2e2b8; border-radius: 15px"
+          style="background-color: #66666614; border-radius: 15px;"
           maxlength="500"
           minlength="20"
           clear-on-edit="true"
           placeholder="Escriba un comentario.."></ion-textarea>
       </ion-col>
       <ion-col size="2">
-        <ion-button style="margin-top: 20px" (click)="CreateComment(comment)">
+        <ion-button color="success" style="margin-top: 0px;
+        height: -webkit-fill-available;
+        padding-bottom: 12px;
+        padding-top: 6px;" (click)="CreateComment(comment)">
           <ion-icon slot="icon-only" name="send-outline"></ion-icon>
         </ion-button>
       </ion-col>
@@ -151,16 +129,16 @@ background: linear-gradient(90deg, rgba(115,233,246,1) 0%, rgba(113,241,170,1) 1
 
   <div *ngIf="comments">
     <ion-list *ngFor="let comment of comments">
-    <ion-item style="padding: 0px 5px;border: solid 2px #a685f9;margin: 0 10px;border-radius: 40px;">
+    <ion-item lines="none" style="padding: 0px 5px;border: solid 1px #67656c26;margin: 5px 10px;border-radius: 5px;">
       <ion-avatar slot="start">
         <ion-icon
-          style="font-size: 40px; margin-top: -4px; color: #a685f9"
+          style="font-size: 40px; margin-top: -4px; color: #0e0e0e"
           name="person-sharp"></ion-icon>
       </ion-avatar>
       <ion-label color="dark" style="margin: 7px 0px">
         <p style="font-weight: 700">Conductor {{comment.driver}}</p>
         <p>{{comment.comment}}</p>
-        <p style="color: #4c8dff; margin-top: -7px">
+        <p style="color: #1c7c43; margin-top: -7px;padding-bottom: 2px;">
           <sub>{{comment.date}}</sub>
         </p>
       </ion-label>

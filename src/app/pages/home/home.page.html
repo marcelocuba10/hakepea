@@ -1,56 +1,50 @@
-<ion-header [translucent]="true" no-border>
+<ion-header [translucent]="true" no-border style="margin-bottom: 24px;">
   <ion-toolbar color="tertiary">
     <ion-buttons slot="start">
       <ion-menu-button style="font-size: 25px;"></ion-menu-button>
     </ion-buttons>
     <ion-title style="font-weight: 700;" class="ion-text-center">
-      Red Social HakePea
+      Avisos del Tránsito
     </ion-title>
-    <ion-buttons slot="primary">
-      <ion-button>
-        <ion-icon name="notifications"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
   <ion-toolbar color="tertiary" style="padding-bottom: 5px;border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;box-shadow: 0px 8px 5px 3px #f3f3f3;">
-  <ion-searchbar style="color:#000" mode="ios" debounce="1000" animated placeholder="Buscar avisos..." (ionChange)="searchPost($event)"> </ion-searchbar>
+  <ion-searchbar style="color:#000" mode="ios" debounce="1000" animated placeholder="Buscar ej: km5" (ionChange)="searchPost($event)"> </ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div *ngIf="posts">
-
-    <ion-list *ngFor="let post of posts | filtroBusqueda:textoBuscar" style="background-color: #F4F4F4;">
-      <ion-card style="border-bottom: ridge 4px #5260ff; border-radius: 25px;margin: 0px 18px;box-shadow: 0 0.3rem 0.8rem rgb(0 0 0 / 12%);">
-        <ion-item class="no-padding" lines="full" button  (click)="showModal(post.id)">  <!-- [routerLink]="['../../detail/',post.id]" -->
-          <ion-thumbnail slot="start" style="margin-right: 5px;margin-top: -20px;margin-left: -7px;height: 12vw;width: 12vw;"><img src="{{post.imgpath}}" /></ion-thumbnail>
+    <ion-list *ngFor="let post of posts | filtroBusqueda:textoBuscar" style="background-color: #F4F4F4;margin-bottom: -21px;margin-top: -21px;">
+      
+      <ion-card style="margin-top: 10px;border-bottom: ridge 4px #a0a0a3; border-radius: 25px;" (click)="showModal(post.id)">
+        <ion-item lines="none">
+          <ion-avatar slot="start">
+            <img src="{{post.imgpath}}" />
+          </ion-avatar>
           <ion-label>
-            <ion-row style="margin-top: -8px;">
-              <ion-col>
-                <div class="ion-text-wrap">
-                  <ion-text>
-                    <h3 style="font-weight: 700;font-size: 16px;color:#5c5c5c;">{{post.category}}</h3>
-                  </ion-text>
-                  <p class="ion-text-capitalize" style="font-size: 16px;">{{post.detail}}</p>
-                  <ion-grid style="margin-bottom: -18px;margin-left: -10px;">
-                    <ion-row>
-                      <ion-col>
-                        <ion-label color="success" style="font-size: 14px;font-weight: bold;">{{post.liked}}<ion-icon style="padding: 0px 2px;vertical-align: top;margin-top: 2px;" name="thumbs-up" color="success"></ion-icon>Verificado</ion-label>
-                      </ion-col>
-                      <ion-col>
-                          <ion-label color="danger" style="font-size: 14px;font-weight: bold;"><b>{{post.disliked}}</b><ion-icon style="padding: 0px 2px;vertical-align: bottom;" name="thumbs-down" color="danger"></ion-icon>Falso</ion-label>
-                      </ion-col>
-                      <ion-col>
-                           <ion-badge style="float: right;margin-bottom: 3px;font-size: 14px;" color="tertiary"><ion-icon style="vertical-align: top;" name="time-outline"></ion-icon> {{post.date}}</ion-badge>
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
-                </div>
-              </ion-col>
-            </ion-row>
+            <h2 style="color:#5c5c5c;font-weight: 700;">{{post.category}}</h2>
+            <h3 style="white-space: pre-wrap;font-size: 16px;">{{post.detail}}</h3>
           </ion-label>
         </ion-item>
+        <ion-item lines="none">
+            <ion-row>
+              <ion-col>
+                <ion-label color="tertiary" style="font-size: 14px;font-weight: bold;">{{post.liked}}<ion-icon style="padding: 0px 2px;vertical-align: top;margin-top: 2px;" name="thumbs-up" color="tertiary"></ion-icon></ion-label>
+              </ion-col>
+              <ion-col>
+                  <ion-label color="tertiary" style="font-size: 14px;font-weight: bold;"><b>{{post.disliked}}</b><ion-icon style="padding: 0px 2px;vertical-align: bottom;" name="thumbs-down" color="tertiary"></ion-icon></ion-label>
+              </ion-col>
+              <ion-col>
+                   <ion-badge style="float: right;margin-bottom: 3px;font-size: 14px;" color="tertiary"><ion-icon style="vertical-align: top;" name="time"></ion-icon> {{post.date}}</ion-badge>
+              </ion-col>
+              <ion-col>
+                <ion-badge style="float: right;margin-bottom: 3px;font-size: 14px;" color="tertiary"><ion-icon style="vertical-align: top;margin-right: 5px;" name="eye"></ion-icon>6575</ion-badge>
+              </ion-col>
+            </ion-row>
+        </ion-item>
       </ion-card>
+
+
     </ion-list>
   </div>
 
@@ -80,8 +74,9 @@
   </div>
 
   <ion-fab style="margin-bottom: 10px;" vertical="bottom" horizontal="center" slot="fixed">
-    <ion-fab-button color="warning" [routerLink]="['../../addPost/']">
+    <ion-fab-button style="width: 60px;height: 60px;" color="warning" [routerLink]="['../../addPost/']">
       <ion-icon style="font-size: 40px;" name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
 </ion-content>

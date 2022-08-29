@@ -38,14 +38,30 @@
 }
 
 .modal-wrapper.sc-ion-modal-md {
-    width: 90% !important;
-    border-radius: 15px;
-    box-shadow: #908e8e 0px 0px 10px 6px;
-    height: 80% !important;
+    // width: 90% !important;
+    // border-radius: 15px;
+    // box-shadow: #908e8e 0px 0px 10px 6px;
+    // height: 80% !important;
 }
 
 .searchbar-input-container.sc-ion-searchbar-ios {
     height: 40px;
     background-color: #fff;
     border-radius: 15px;
+}
+
+.sc-ion-modal-ios-h {
+    // --width: 90%;
+    // --height: 75%;
+    // --border-radius: 5px;
+}
+
+.header-ios ion-toolbar:last-of-type {
+    --border-width: 0 0 0px;
+}
+
+textarea.native-textarea.sc-ion-textarea-ios {
+    text-align: left;
+    margin-left: 10px;
+    font-size: 14px;
 }
