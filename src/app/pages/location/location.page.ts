@@ -79,6 +79,35 @@ export class LocationPage implements OnInit {
     });
   }
 
+  private async getLocation() {
+    const rta = await this.geolocation.getCurrentPosition();
+    return {
+      lat: rta.coords.latitude,
+      lng: rta.coords.longitude
+    };
+  }
+
+  async getPosts() {
+    try {
+      this.postSubscription = this.firestore.collection("posts", ref => ref.orderBy("timestamp", "desc")).snapshotChanges().subscribe(
+        data => {
+          this.posts = data.map(e => {
+            return {
+              id: e.payload.doc.id,
+              detail: e.payload.doc.data()["detail"],
+              category: e.payload.doc.data()["category"],
+              address: e.payload.doc.data()["address"],
+              imgpathMarker: e.payload.doc.data()["imgpathMarker"],
+              time: e.payload.doc.data()["time"],
+              lat: e.payload.doc.data()["lat"],
+              lng: e.payload.doc.data()["lng"],
+            };
+          });
+        });
+    } catch (error) {
+      this.appService.presentToast(error);
+    }
+  }
 
   renderMarkers(post: Post) {
     if (!post) {
@@ -102,44 +131,16 @@ export class LocationPage implements OnInit {
           this.showInfoMarker(post);
         });
       }
-
-      // marker.addListener('click', function () {
-      //   //show message
-      //   //this.appService.presentAlert("info");
-      //   infowindow.open(this.map, marker);
-      // }); 
-
-      // const contentString = '<div id="content">' +
-      //   '<div id="siteNotice">' +
-      //   '</div>' +
-      //   '<h1 id="firstHeading" class="firstHeading">' + post.category + '</h1>' +
-      //   '<div id="bodyContent">' +
-      //   '<img center style="width: min-content;" src="https://firebasestorage.googleapis.com/v0/b/hakepea-9e21a.appspot.com/o/category-detail%2Fpolice-icon-80x80%20(1).png?alt=media&token=80caac4b-25f2-491d-9c59-8ee60a15dd41" width="200">' +
-      //   '<p><b>Categoría: </b>' + post.category + '</p>' +
-      //   '<p><b>Fecha: </b>' + post.date + '</p>' +
-      //   '<p><b>Descripción: </b>' + post.detail + '</p>' +
-      //   '<p><b>Me gusta: </b>' + post.liked + '</p>' +
-      //   '<p><b>No me gusta: </b>' + post.disliked + '</p>' +
-      //   '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
-      //   'https://en.wikipedia.org/w/index.php?title=Uluru</a> ' +
-      //   '(last visited June 22, 2009).</p>' +
-      //   '</div>' +
-      //   '</div>';
-
-      // const infowindow = new google.maps.InfoWindow({
-      //   content: contentString,
-      //   maxWidth: 400
-      // });
-
     });
   }
 
   async showInfoMarker(post: Post) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: post.category,
+      mode: 'ios',
+      header: post.category + " - " + post.time,
       subHeader: post.detail,
-      message: post.date,
+      message: post.address,
       buttons: ['OK']
     });
 
@@ -165,35 +166,6 @@ export class LocationPage implements OnInit {
           scaledSize: new google.maps.Size(50, 50)
         }
       });
-    }
-  }
-
-  private async getLocation() {
-    const rta = await this.geolocation.getCurrentPosition();
-    return {
-      lat: rta.coords.latitude,
-      lng: rta.coords.longitude
-    };
-  }
-
-  async getPosts() {
-    try {
-      this.postSubscription = this.firestore.collection("posts", ref => ref.orderBy("timestamp", "desc")).snapshotChanges().subscribe(
-        data => {
-          this.posts = data.map(e => {
-            return {
-              id: e.payload.doc.id,
-              detail: e.payload.doc.data()["detail"],
-              category: e.payload.doc.data()["category"],
-              imgpathMarker: e.payload.doc.data()["imgpathMarker"],
-              date: e.payload.doc.data()["date"],
-              lat: e.payload.doc.data()["lat"],
-              lng: e.payload.doc.data()["lng"],
-            };
-          });
-        });
-    } catch (error) {
-      this.appService.presentToast(error);
     }
   }
 

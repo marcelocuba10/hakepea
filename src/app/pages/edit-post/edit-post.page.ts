@@ -52,7 +52,7 @@ export class EditPostPage implements OnInit {
       this.firestore.doc("posts/" + id).valueChanges().subscribe(data => {
         this.post.detail = data["detail"];
         this.post.category = data["category"];
-        this.post.date = data["date"];
+        this.post.time = data["time"];
         this.post.imgpath = data["imgpath"];
         this.post.liked = data["liked"];
         this.post.disliked = data["disliked"];

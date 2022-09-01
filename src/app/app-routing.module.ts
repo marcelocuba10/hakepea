@@ -39,13 +39,10 @@ const routes: Routes = [
     canActivate:[AuthGuard]
   },
   {
-    path: 'detail/:id',
-    loadChildren: () => import('./pages/detail/detail.module').then( m => m.DetailPageModule)
-  },
-  {
     path: 'disclaimer',
     loadChildren: () => import('./pages/disclaimer/disclaimer.module').then( m => m.DisclaimerPageModule)
-  },  {
+  },
+  {
     path: 'location',
     loadChildren: () => import('./pages/location/location.module').then( m => m.LocationPageModule)
   },

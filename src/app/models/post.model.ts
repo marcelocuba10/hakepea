@@ -1,7 +1,7 @@
 export interface Post{
     detail?:string;
     category?:string;
-    date?: string;
+    time?: string;
     imgpath?: string;
     imgpathMarker?: string;
     timestamp?:number;
@@ -9,4 +9,6 @@ export interface Post{
     disliked?:number;
     lat?:number;
     lng?:number;
+    views?:any;
+    address?:string;
 }

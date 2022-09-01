@@ -16,8 +16,7 @@ export class FiltroBusquedaPipe implements PipeTransform {
 
     //la funcion filter regresa un nuevo arreglo
     return posts.filter(post => {
-      return post.detail.toLocaleLowerCase().includes(texto)
-      ||  post.category.toLocaleLowerCase().includes(texto);
+      return post.detail.toLocaleLowerCase().includes(texto) || post.address.toLocaleLowerCase().includes(texto) || post.category.toLocaleLowerCase().includes(texto);
     });
 
   }

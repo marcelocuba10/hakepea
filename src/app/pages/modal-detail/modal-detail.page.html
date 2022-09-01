@@ -21,6 +21,9 @@
       <ion-card-title style="font-size: 24px;font-weight: 800;color: #221e70;">{{post.category}}</ion-card-title>
     </ion-card-header>
     <ion-card-content style="color: #222428;font-size: 18px;">{{post.detail}}</ion-card-content>
+    <ion-card-header>
+      <ion-card-subtitle>{{ post.address }}</ion-card-subtitle>
+    </ion-card-header>
     <ion-row style="margin-top:-10px">
       <ion-col size="5">       
         <ion-chip (click)="showMapWithMarkers()" color="tertiary">
@@ -29,15 +32,15 @@
         </ion-chip>
       </ion-col>
       <ion-col size="4">       
-        <ion-chip (click)="showMapWithMarkers()" color="tertiary">
+        <ion-chip color="tertiary">
           <ion-icon name="time-outline"></ion-icon>
-          <ion-label>{{post.date}}</ion-label>
+          <ion-label>{{post.time}}</ion-label>
         </ion-chip>
       </ion-col>
       <ion-col size="3">
         <ion-chip color="tertiary">
           <ion-icon name="eye-outline"></ion-icon>
-          <ion-label>542</ion-label>
+          <ion-label>{{post.views}}</ion-label>
         </ion-chip>
       </ion-col>  
     </ion-row>

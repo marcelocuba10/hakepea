@@ -35,10 +35,6 @@ const routes: Routes = [
         canActivate:[AuthGuard]
       },
       {
-        path: 'detail/:id',
-        loadChildren: () => import('../pages/detail/detail.module').then(m => m.DetailPageModule)
-      },
-      {
         path: 'edit-post/:id',
         loadChildren: () => import('../pages/edit-post/edit-post.module').then(m => m.EditPostPageModule),
         canActivate:[AuthGuard]

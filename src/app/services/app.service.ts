@@ -25,6 +25,7 @@ export class AppService {
     const alert = await this.alertCtrl.create({
       cssClass: 'my-custom-class',
       header: 'Atención',
+      mode: 'ios',
       message: message,
       buttons: ['OK']
     });
@@ -89,10 +90,10 @@ export class AppService {
   async formValidation(model, page) {
 
     if (page == "post") {
-      if (!model.detail) {
-        this.presentAlert("Escriba una descripción para el aviso");
-        return false;
-      }
+      // if (!model.detail) {
+      //   this.presentAlert("Escriba una descripción para el aviso");
+      //   return false;
+      // }
       if (!model.category) {
         this.presentAlert("Selecciona una categoría");
         return false;

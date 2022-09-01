@@ -65,3 +65,23 @@ textarea.native-textarea.sc-ion-textarea-ios {
     margin-left: 10px;
     font-size: 14px;
 }
+
+.alert-head.sc-ion-alert-md {
+    text-align: center;
+}
+
+div#alert-1-msg {
+    text-align: center;
+}
+
+.list-md {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0px;
+    padding-bottom: 8px;
+    background: var(--ion-item-background, var(--ion-background-color, #fff));
+}

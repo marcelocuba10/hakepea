@@ -19,12 +19,12 @@ export class ModalDetailPage implements OnInit {
   public post = {} as Post;
   private loading: any;
   public comment = {} as Comment;
-  public comments: any= null;
+  public comments: any = null;
   private likeOneTime = 0; //btn like o dislike, count one time forEach
-  private countLike: number;
-  private countDislike: number;
   private postSubscription: Subscription;
   private commentSubscription: Subscription;
+
+  public viewCount: number;
 
   public driverNumber = Math.floor(Math.random() * 999) + 50;
   public dateComment = moment().locale('es').format('dddd, D MMMM, h:mm a');
@@ -36,42 +36,28 @@ export class ModalDetailPage implements OnInit {
     private firestore: AngularFirestore,
     private navCtrl: NavController,
     private alertCtrl: AlertController
-  ) { }
-  
-
-   ngOnInit() {
-    this.getPostById(this.id);
-    this.getCommentById();
+  ) {
+    console.log('init constructor');
   }
 
-  ionViewWillEnter (){
-    //this.getCommentById();
-    
+
+  async ngOnInit() {
+    await this.getPostById(this.id);
+    this.getCommentById();
+    console.log('init ngOnInit');
   }
 
-  ionViewDidEnter (){
-    this.getCommentById();
+  ionViewWillEnter() {
+    this.increaseViews();
+    console.log('init ionViewWillEnter');
+  }
+
+  ionViewDidEnter() {
   }
 
   ionViewDidLeave() {
-    this.comments=null;
+    this.comments = null;
   }
-
-
-    async testecom(data : any){
-
-      const xx=data.length; 
-
-
-    if(xx===0){
-      console.log("no comments" + xx);
-      this.CreateCommentInitial();
-    }else{
-      console.log("yes, comments"+ xx);
-    }
-
-    }
-
 
   showMapWithMarkers() {
     //redirect to home
@@ -85,6 +71,13 @@ export class ModalDetailPage implements OnInit {
     });
   }
 
+  async presentLoading() {
+    this.loading = await this.loadingCtrl.create({
+      message: "Por favor, espere.."
+    });
+    return this.loading.present();
+  }
+
   async getPostById(id: string) {
     //show loading
     await this.presentLoading();
@@ -94,13 +87,12 @@ export class ModalDetailPage implements OnInit {
         data => {
           this.post.detail = data["detail"];
           this.post.category = data["category"];
-          this.post.date = data["date"];
+          this.post.time = data["time"];
           this.post.imgpath = data["imgpath"];
           this.post.liked = data["liked"];
           this.post.disliked = data["disliked"];
-          this.countLike = this.post.liked * 0.1;
-          this.countDislike = this.post.disliked * 0.1;
-          console.log(this.post);
+          this.post.views = data["views"];
+          this.post.address = data["address"];
         }
       );
       // //dismiss loading
@@ -110,29 +102,29 @@ export class ModalDetailPage implements OnInit {
     }
   }
 
-  async presentLoading() {
-    this.loading = await this.loadingCtrl.create({
-      message: "Por favor, espere.."
-    });
-    return this.loading.present();
-  }
-
   async getCommentById() {
     try {
-       this.commentSubscription = this.firestore.collection("comments", ref => ref.where("idPost", "==", this.id).orderBy("timestamp", "desc")).snapshotChanges().subscribe(
-         data => {
-           this.comments = data.map(e => {
-             return {
-               id: e.payload.doc.id,
-               comment: e.payload.doc.data()["comment"],
-               date: e.payload.doc.data()["date"],
-               driver: e.payload.doc.data()["driver"],
-               idPost: e.payload.doc.data()["idPost"],
-             };
-           });
-         });
-
-         this.testecom(this.comments);
+      this.commentSubscription = this.firestore.collection("comments", ref => ref.where("idPost", "==", this.id).orderBy("timestamp", "desc")).snapshotChanges().subscribe(
+        data => {
+          this.comments = data.map(e => {
+            return {
+              id: e.payload.doc.id,
+              comment: e.payload.doc.data()["comment"],
+              date: e.payload.doc.data()["date"],
+              driver: e.payload.doc.data()["driver"],
+              idPost: e.payload.doc.data()["idPost"],
+            };
+          });
+          setTimeout(async () => {
+            console.log('enter in setTimeout');
+            if (data.length == 0) {
+              //is 0 - no comments, create one
+              this.CreateInitialComment();
+            } else {
+              console.log("this notice has comments");
+            }
+          }, 2000);
+        });
     } catch (error) {
       this.appService.presentToast(error);
     }
@@ -149,7 +141,7 @@ export class ModalDetailPage implements OnInit {
         this.comment.date = moment().locale('es').format('dddd, D MMMM, h:mm a');
         this.comment.timestamp = Date.now();
         this.comment.idPost = this.id;
-        this.comment.driver=this.driverNumber;
+        this.comment.driver = this.driverNumber;
         await this.firestore.collection("comments").add(comment);
       } catch (error) {
         this.appService.presentToast(error);
@@ -161,25 +153,42 @@ export class ModalDetailPage implements OnInit {
     }
   }
 
-  async CreateCommentInitial() {
+  async CreateInitialComment() {
+    try {
+      this.comment.comment = "Gracias por tu aviso!";
+      this.comment.date = moment().locale('es').format('dddd, D MMMM, h:mm a');
+      this.comment.timestamp = Date.now();
+      this.comment.idPost = this.id;
+      this.comment.driver = this.driverNumber;
+      await this.firestore.collection("comments").add(this.comment);
+    } catch (error) {
+      this.appService.presentToast(error);
+      console.log(error);
+    }
+  }
+
+  async increaseViews() {
+    console.log('increaseViews');
+    setTimeout(async () => {
+      console.log('se ejecuta despues de 2000 miliseconds:' + this.post.views);
+      this.post.views += 1;
+
       try {
-        this.comment.comment="Gracias por tu aviso!";
-        this.comment.date = moment().locale('es').format('dddd, D MMMM, h:mm a');
-        this.comment.timestamp = Date.now();
-        this.comment.idPost = this.id;
-        this.comment.driver=this.driverNumber;
-        await this.firestore.collection("comments").add(this.comment);
+        console.log('guarda');
+        await this.firestore.doc("posts/" + this.id).update(this.post);
       } catch (error) {
         this.appService.presentToast(error);
         console.log(error);
       }
+
+    }, 2000);
   }
 
   async increaseProgressUp() {
     if (this.likeOneTime == 0) {
       this.likeOneTime = 1;
       this.post.liked += 1;
-
+      this.post.views += 1;
       try {
         await this.firestore.doc("posts/" + this.id).update(this.post);
       } catch (error) {

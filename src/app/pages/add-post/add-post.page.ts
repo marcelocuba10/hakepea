@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs';
-import { Component, OnInit,ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as moment from 'moment';
 import { Post } from '../../models/post.model';
 import { AppService } from 'src/app/services/app.service';
@@ -19,20 +19,16 @@ export class AddPostPage implements OnInit {
   post = {} as Post;
   categories: any;
   private categoriesSubscription: Subscription;
-  mapRef: any;
-  map : any;
   public myLatLng: any;
   toggleValue: boolean = true;
   public borderColor: any;
   public btnSelected: any;
 
-  address:string;
+  address: string;
   placeid: any;
 
-  @ViewChild('map', { static: false }) mapElement: ElementRef;
-
-  latitude: number;
-  longitude: number;
+  public latitude: number;
+  public longitude: number;
 
   constructor(
     private appService: AppService,
@@ -41,13 +37,13 @@ export class AddPostPage implements OnInit {
     private alertCtrl: AlertController,
     private geolocation: Geolocation,
     private loadingCtrl: LoadingController,
-    private nativeGeocoder: NativeGeocoder, 
+    private nativeGeocoder: NativeGeocoder,
   ) { }
 
   async ngOnInit() {
     this.myLatLng = await this.getLocation();
     this.getCategories();
-    this.loadMap();
+    this.getAddressFromCoords(this.myLatLng);
   }
 
   //ejecuta cuando cada vez que salimos de la pagina
@@ -55,43 +51,14 @@ export class AddPostPage implements OnInit {
     this.btnSelected = null;
   }
 
-  private async getLocation() {
-
-    const rta = await this.geolocation.getCurrentPosition();
-    return {
-      lat: rta.coords.latitude,
-      lng: rta.coords.longitude
-    };
-    
-  }
-
-  loadMap() {
-    this.geolocation.getCurrentPosition().then((resp) => {
-      let latLng = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
-      let mapOptions = {
-        center: latLng,
-        zoom: 15,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
-      this.getAddressFromCoords(resp.coords.latitude, resp.coords.longitude);
-      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-      this.map.addListener('tilesloaded', () => {
-        console.log('accuracy',this.map);
-        this.getAddressFromCoords(this.map.center.lat(), this.map.center.lng())
-      });
-    }).catch((error) => {
-      console.log('Error getting location', error);
-    });
- }
-
-  getAddressFromCoords(lattitude, longitude) {
-    console.log("getAddressFromCoords " + lattitude+ " " +longitude);
+  getAddressFromCoords(myLatLng) {
+    console.log("getAddressFromCoords " + myLatLng.lat + " " + myLatLng.lng);
     let options: NativeGeocoderOptions = {
       useLocale: true,
       maxResults: 5
     };
 
-    this.nativeGeocoder.reverseGeocode(lattitude, longitude, options)
+    this.nativeGeocoder.reverseGeocode(myLatLng.lat, myLatLng.lng, options)
       .then((result: NativeGeocoderResult[]) => {
         this.address = "";
         let responseAddress = [];
@@ -107,35 +74,42 @@ export class AddPostPage implements OnInit {
         this.address = this.address.slice(0, -2);
       })
       .catch((error: any) => {
-        this.address = "Address Not Available!";
+        this.address = "Dirección no disponible";
       });
+  }
 
+  private async getLocation() {
+    const rta = await this.geolocation.getCurrentPosition();
+    return {
+      lat: rta.coords.latitude,
+      lng: rta.coords.longitude
+    };
   }
 
   async createPost(post: Post) {
     this.appService.presentLoading(1);
     try {
-      this.post.date = moment().locale('es').format('LT');
+      this.post.address = this.address;
+      this.post.time = moment().locale('es').format('LT');
       this.post.timestamp = Date.now();
       this.post.liked = 1;
+      this.post.views = 1;
       this.post.disliked = 0;
 
       if (this.toggleValue == true) {
         //save lat and lng in model post
         this.post.lat = this.myLatLng.lat;
         this.post.lng = this.myLatLng.lng;
-
-        console.log(this.post.lat);
-        console.log(this.post.lng);
       } else {
         this.post.lat = null;
         this.post.lng = null;
-
-        console.log(this.post.lat);
-        console.log(this.post.lng);
       }
 
-      //save post in firestore
+      if (!this.post.detail) {
+        this.post.detail = "Sin información";
+      }
+
+      //save data in firestore
       await this.firestore.collection("posts").add(post);
       this.appService.presentLoading(0);
 
@@ -157,6 +131,7 @@ export class AddPostPage implements OnInit {
     if (await this.appService.formValidation(post, "post")) {
       const alert = await this.alertCtrl.create({
         header: 'Atención',
+        mode: 'ios',
         message: 'Si envías falsos avisos, puede que te quitemos el acceso a la aplicación. Enviar aviso?',
         buttons: [
           {
@@ -197,7 +172,7 @@ export class AddPostPage implements OnInit {
   clearInputs() {
     this.post.detail = '';
     this.post.category = '';
-    this.post.date = '';
+    this.post.time = '';
     this.post.imgpath = '';
   }
 
@@ -237,48 +212,5 @@ export class AddPostPage implements OnInit {
     this.post.imgpath = category.imgpath;
     this.post.imgpathMarker = category.imgpathMarker;
   }
-
-  // async loadmap() {
-  //   //show loading
-  //   const loading = await this.loadingCtrl.create();
-  //   loading.present();
-
-  //   if (!this.myLatLng) {
-  //     //run first time getlocation
-  //     this.myLatLng = await this.getLocation();
-  //   }
-
-  //   console.log(this.myLatLng);
-
-  //   //save lat and lng in model post
-  //   this.post.lat = this.myLatLng.lat;
-  //   this.post.lng = this.myLatLng.lng;
-
-  //   //show location in map
-  //   const mapEle: HTMLElement = document.getElementById('map');
-
-  //   // //crear mapa
-  //   this.mapRef = new google.maps.Map(mapEle, {
-  //     center: { lat: this.myLatLng.lat, lng: this.myLatLng.lng },
-  //     zoom: 18,
-  //     mapTypeId: 'roadmap'
-  //   });
-
-  //   google.maps.event.addListenerOnce(this.mapRef, 'idle', () => {
-  //     loading.dismiss();
-  //     this.addMarker(this.myLatLng.lat, this.myLatLng.lng);
-  //   });
-  // }
-
-  // private addMarker(lat: number, lng: number) {
-  //   const marker = new google.maps.Marker({
-  //     position: {
-  //       lat, lng
-  //     },
-  //     map: this.mapRef,
-  //     title: 'hello world!',
-  //     snippet: 'This plugin is awesome!',
-  //   });
-  // }
 
 }

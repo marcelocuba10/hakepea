@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/services/app.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-home',
@@ -17,11 +18,13 @@ export class HomePage implements OnInit {
   private postSubscription: Subscription;
   //searchBar
   textoBuscar = '';
+  public teste;
 
   constructor(
     private appService: AppService,
     private firestore: AngularFirestore,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private navCtrl:NavController
   ) { }
 
   searchPost(event) {
@@ -29,6 +32,12 @@ export class HomePage implements OnInit {
     const texto = event.target.value;
     this.textoBuscar = texto;
     console.log(texto);
+  }
+
+  showMapWithMarkers() {
+    //redirect to home
+    this.navCtrl.navigateRoot("location");
+    
   }
 
   getColorBorder(category) {
@@ -101,7 +110,10 @@ export class HomePage implements OnInit {
               date: e.payload.doc.data()["date"],
               imgpath: e.payload.doc.data()["imgpath"],
               liked: e.payload.doc.data()["liked"],
-              disliked: e.payload.doc.data()["disliked"]
+              disliked: e.payload.doc.data()["disliked"],
+              views: e.payload.doc.data()["views"],
+              address: e.payload.doc.data()["address"],
+              time: e.payload.doc.data()["time"]
             };
           });
         });
